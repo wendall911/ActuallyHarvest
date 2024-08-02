@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "issues": "${issue_tracker}"
+  },
+  "license": "${license}",
+  "icon": "${mod_id}_icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "creeperfireworks.ActuallyHarvestFabric"
+    ],
+    "client": [
+      "creeperfireworks.ActuallyHarvestFabricClient"
+    ],
+    "spectrelib": [
+      "creeperfireworks.FabricConfigInitializer"
+    ]
+  },
+  "mixins": [
+    "creeperfireworks.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "${fabric_loader_min_version}",
+    "fabric": "*",
+    "minecraft": "${fabric_mc_version_range}",
+    "java": ">=${java_version}"
+  }
+}
