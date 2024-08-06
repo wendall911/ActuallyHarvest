@@ -6,13 +6,14 @@ A mod that actually works with right click harvest for both Forge and Fabric. Th
 
 This mod supports most modded crops and trees, is configurable and will actually work when released.
 
-There are likely conflicts with using other right click harvest features in other mods, please report if so and I can update to resolve the conflicts.
+There are possible conflicts with using other right click harvest features in other mods, please report if so and I can update to resolve the conflicts. It is best to just disable the feature in other mods providing duplicate functionality.
 
 ## Supported Mods
-- Pam's HarvestCraft 2
-- Farmer's Delight
-- The Veggie Way
-- Fruitful Fun
+ - Pam's HarvestCraft 2
+ - Croptopia
+ - Farmer's Delight
+ - The Veggie Way
+ - Fruitful Fun
 
 All Downloads:
 
@@ -21,4 +22,4 @@ All Downloads:
 ## Links of Interest
 
 + [ActuallyHarvest Curseforge Page](https://www.curseforge.com/minecraft/mc-mods/actually-harvest)
-+ [ActuallyHarvest Modrinth Page](https://modrinth.com/project/actually-harvest-mod)
++ [ActuallyHarvest Modrinth Page](https://modrinth.com/project/actually-harvest)

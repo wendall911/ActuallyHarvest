@@ -19,20 +19,14 @@ repositories {
 archivesBaseName = "${mod_id}"
 version = "${minecraft_version}-${mod_version}-FORGE"
 
-mixin {
-    add sourceSets.main, "${mod_id}-refmap.json"
-
-    config "${mod_id}.mixins.json"
-}
-
 minecraft {
     mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
 
-    if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
-        // This location is hardcoded in Forge and can not be changed.
-        // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+    // Automatically enable forge AccessTransformers if the file exists
+    // This location is hardcoded in Forge and can not be changed.
+    // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
         accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-        project.logger.debug('Forge Access Transformers are enabled for this project.')
     }
 
     runs {
@@ -41,9 +35,6 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "-mixin.config=${mod_id}.mixins.json"
             mods {
                 modClientRun {
                     source sourceSets.main
@@ -57,9 +48,6 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Server'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "-mixin.config=${mod_id}.mixins.json"
             mods {
                 modServerRun {
                     source sourceSets.main
@@ -73,7 +61,7 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
     jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {
@@ -83,6 +71,16 @@ dependencies {
     // Testing mods
     runtimeOnly fg.deobf("curse.maven:configured-457570:5180902")
     runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    //runtimeOnly fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:ephero_lib-885449:${ephero_lib_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:croptopia-415438:${croptopia_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:phc_crops-361385:${phc_crops_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:phc_trees-365460:${phc_trees_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:kiwi-303657:${kiwi_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:lychee-567403:${lychee_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:fruittrees-355467:${fruit_trees_forge_version}")
 }
 
 compileJava {
@@ -94,7 +92,7 @@ tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [
     'version': version,
     'forge_mc_version_range': forge_mc_version_range,
@@ -180,9 +178,9 @@ tasks.build.dependsOn('changelog', 'generateUpdates')
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
 
 task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    if (project.hasProperty('cfcurseApiKey')) {
-        apiToken = project.cfcurseApiKey
-        def mainFile = upload(project.cfcurseId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+    if (project.hasProperty('ahcurseApiKey')) {
+        apiToken = project.ahcurseApiKey
+        def mainFile = upload(project.ahcurseId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
         mainFile.changelog = file(changelogFile)
         mainFile.addJavaVersion("Java ${java_version}")
         mainFile.addModLoader('Forge', 'NeoForge')
@@ -201,9 +199,9 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
 }
 
 modrinth {
-    if (project.hasProperty('cfModrinthId')) {
+    if (project.hasProperty('ahModrinthId')) {
         token = project.modrinthKey
-        projectId = project.cfModrinthId
+        projectId = project.ahModrinthId
         version = getVersion()
         versionType = "${release_type}"
         if (file(changelogFile).exists()) {

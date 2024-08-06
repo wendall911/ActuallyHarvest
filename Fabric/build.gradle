@@ -40,8 +40,8 @@ dependencies {
 }
 
 loom {
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
+    if (project(":Common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
+        accessWidenerPath.set(project(":Common").file("src/main/resources/${mod_id}.accesswidener"))
     }
     runs {
         client {
@@ -84,9 +84,9 @@ tasks.withType(JavaCompile) {
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
 
 task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    if (project.hasProperty('cfcurseApiKey')) {
-        apiToken = project.cfcurseApiKey
-        def mainFile = upload(project.cfcurseId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+    if (project.hasProperty('ahcurseApiKey')) {
+        apiToken = project.ahcurseApiKey
+        def mainFile = upload(project.ahcurseId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
         mainFile.changelog = file(changelogFile)
         mainFile.addJavaVersion("Java ${java_version}")
         mainFile.addModLoader('Fabric')
@@ -102,9 +102,9 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
 }
 
 modrinth {
-    if (project.hasProperty('cfModrinthId')) {
+    if (project.hasProperty('ahModrinthId')) {
         token = project.modrinthKey
-        projectId = project.cfModrinthId
+        projectId = project.ahModrinthId
         version = getVersion()
         versionType = "${release_type}"
         if (file(changelogFile).exists()) {
