@@ -11,7 +11,7 @@ public class TagManager {
 
     public static final class Blocks {
 
-        public static final TagKey<Block> HARVEST_BLACKLIST = TagKey.create(Registries.BLOCK, new ResourceLocation(ActuallyHarvest.MODID, "harvest_blacklist"));
+        public static final TagKey<Block> HARVEST_BLACKLIST = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ActuallyHarvest.MODID, "harvest_blacklist"));
 
     }
 

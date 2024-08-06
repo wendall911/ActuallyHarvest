@@ -1,8 +1,6 @@
 plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
-    id 'net.darkhax.curseforgegradle'
-    id 'com.modrinth.minotaur'
 }
 
 version = fabric_mod_version
@@ -24,8 +22,6 @@ dependencies {
     modRuntimeOnly("com.terraformersmc:modmenu:${mod_menu_version}") {
         transitive = false
     }
-
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
     include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-fabric', version: "${spectrelib_version}+${minecraft_version}"
 

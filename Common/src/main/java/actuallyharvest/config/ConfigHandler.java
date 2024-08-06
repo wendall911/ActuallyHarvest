@@ -77,7 +77,7 @@ public class ConfigHandler {
         }
 
         for (String blockKey : COMMON.harvestableBlocks.get()) {
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(blockKey));
+            Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(blockKey));
 
             if (block != Blocks.AIR) {
                 Common.rightClickBlocks.add(block);

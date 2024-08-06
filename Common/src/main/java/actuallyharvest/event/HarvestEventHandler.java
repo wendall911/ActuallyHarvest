@@ -9,7 +9,6 @@
  */
 package actuallyharvest.event;
 
-import net.minecraft.world.entity.EquipmentSlot;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -77,7 +77,7 @@ public class HarvestEventHandler {
 
         if (isHoe) {
             if (BlockHelper.getInteractionTypeForBlock(blockState, true) == BlockHelper.InteractionType.NONE
-                    && BlockHelper.getInteractionTypeForBlock(above, true ) == BlockHelper.InteractionType.NONE) {
+                    && BlockHelper.getInteractionTypeForBlock(above, true) == BlockHelper.InteractionType.NONE) {
                 return ClickResult.pass();
             }
         }
@@ -88,10 +88,10 @@ public class HarvestEventHandler {
             for (int z = 0; z < 1; z++) {
                 BlockPos shiftPos = pos.offset(x, 0, z);
 
-                if (!tryHarvest(level, shiftPos, player, hand, false)) {
+                if (!tryHarvest(level, shiftPos, player, hand, true)) {
                     shiftPos = shiftPos.above();
 
-                    if (tryHarvest(level, shiftPos, player, hand, false)) {
+                    if (tryHarvest(level, shiftPos, player, hand, true)) {
                         harvested = true;
                     }
                 }
