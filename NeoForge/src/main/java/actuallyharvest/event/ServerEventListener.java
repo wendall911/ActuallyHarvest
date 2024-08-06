@@ -1,8 +1,8 @@
 package actuallyharvest.event;
 
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class ServerEventListener {
@@ -14,8 +14,8 @@ public class ServerEventListener {
         if (result.isPresent()) {
             event.setCanceled(true);
             event.setCancellationResult(result.getInteractionResult());
-            event.setUseBlock(Event.Result.DENY);
-            event.setUseItem(Event.Result.DENY);
+            event.setUseBlock(TriState.FALSE);
+            event.setUseItem(TriState.FALSE);
         }
     }
 

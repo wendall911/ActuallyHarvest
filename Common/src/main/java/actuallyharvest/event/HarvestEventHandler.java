@@ -9,6 +9,7 @@
  */
 package actuallyharvest.event;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import org.jetbrains.annotations.Nullable;
@@ -103,7 +104,7 @@ public class HarvestEventHandler {
         if (!harvested) return ClickResult.pass();
 
         if (!level.isClientSide && ConfigHandler.Common.damageTool()) {
-            heldStack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            heldStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
 
         return ClickResult.interrupt();

@@ -17,7 +17,7 @@
     "main": [
       "actuallyharvest.ActuallyHarvestFabric"
     ],
-    "spectrelib": [
+    "spectrelib-config": [
       "actuallyharvest.FabricConfigInitializer"
     ]
   },

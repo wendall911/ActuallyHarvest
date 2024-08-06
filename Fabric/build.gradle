@@ -54,10 +54,6 @@ loom {
     }
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
 
 task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
