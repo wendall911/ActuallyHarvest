@@ -2,6 +2,7 @@ modLoader="javafml"
 loaderVersion="${loader_version_range}"
 issueTrackerURL="${issue_tracker}"
 license="${license}"
+logoFile="${mod_id}_icon.png"
 
 [[mods]]
   modId="${mod_id}"
