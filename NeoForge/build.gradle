@@ -1,153 +1,68 @@
 plugins {
-    id 'idea'
-    id 'maven-publish'
-    id 'net.minecraftforge.gradle'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin'
+    id 'multiloader-loader'
+    id 'net.neoforged.gradle.userdev'
     id 'net.darkhax.curseforgegradle'
     id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.71.8'
     id 'com.modrinth.minotaur'
 }
 
-repositories {
-    maven {
-        name = "C4's Maven"
-        url = "https://maven.theillusivec4.top/"
+archivesBaseName = "${mod_id}"
+version = neoforge_mod_version
+
+// Automatically enable neoforge AccessTransformers if the file exists
+// This location is hardcoded in FML and can not be changed.
+// https://github.com/neoforged/FancyModLoader/blob/a952595eaaddd571fbc53f43847680b00894e0c1/loader/src/main/java/net/neoforged/fml/loading/moddiscovery/ModFile.java#L118
+def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+if (at.exists()) {
+    minecraft.accessTransformers.file at
+}
+runs {
+    configureEach {
+        modSource project.sourceSets.main
+    }
+    client {
+        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+    }
+    server {
+        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
     }
 }
 
-archivesBaseName = "${mod_id}"
-version = "${minecraft_version}-${mod_version}-FORGE"
-
-minecraft {
-    mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
-
-    // Automatically enable forge AccessTransformers if the file exists
-    // This location is hardcoded in Forge and can not be changed.
-    // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    }
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
-        }
+subsystems {
+    parchment {
+        minecraftVersion = "${parchment_mc_version}"
+        mappingsVersion = "${parchment_version}"
     }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compileOnly project(":Common")
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    implementation "net.neoforged:neoforge:${neoforge_version}"
 
-    implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
-    jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {
-        jarJar.pin(it, "${spectrelib_version}")
-    }
+    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}+${minecraft_version}"
+    jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}+${minecraft_version}"
 
     // Testing mods
-    runtimeOnly fg.deobf("curse.maven:configured-457570:5180902")
-    runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-    //runtimeOnly fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:ephero_lib-885449:${ephero_lib_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:croptopia-415438:${croptopia_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:phc_crops-361385:${phc_crops_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:phc_trees-365460:${phc_trees_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:kiwi-303657:${kiwi_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:lychee-567403:${lychee_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:fruittrees-355467:${fruit_trees_forge_version}")
+    runtimeOnly "curse.maven:configured-457570:5180902"
+    runtimeOnly "curse.maven:catalogue-459701:4766090"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+    //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_forge_version}"
+    //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_forge_version}"
+    //runtimeOnly "curse.maven:croptopia-415438:${croptopia_forge_version}"
+    //runtimeOnly "curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}"
+    //runtimeOnly "curse.maven:phc_crops-361385:${phc_crops_forge_version}"
+    //runtimeOnly "curse.maven:phc_trees-365460:${phc_trees_forge_version}"
+    //runtimeOnly "curse.maven:kiwi-303657:${kiwi_forge_version}"
+    //runtimeOnly "curse.maven:lychee-567403:${lychee_forge_version}"
+    //runtimeOnly "curse.maven:fruittrees-355467:${fruit_trees_forge_version}"
 }
 
-compileJava {
-    source(project(":Common").sourceSets.main.allSource)
-    options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-serial" << "-Werror"
-}
-
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
-}
-
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-def replaceProperties = [
-    'version': version,
-    'forge_mc_version_range': forge_mc_version_range,
-    'forge_version_range': forge_version_range,
-    'loader_version_range': loader_version_range,
-    'license': license,
-    'mod_id': mod_id,
-    'mod_author': mod_author,
-    'mod_description': mod_description,
-    'mod_name': mod_name,
-    'issue_tracker': issue_tracker,
-    'mod_credits': mod_credits,
-    'mod_update_branch': mod_update_branch
-]
-
-processResources {
-    from project(":Common").sourceSets.main.resources
-    duplicatesStrategy(DuplicatesStrategy.FAIL)
-    inputs.properties replaceProperties
-    replaceProperties.put 'project', project
-
-    filesMatching(resourceTargets) {
-        expand replaceProperties
-    }
-}
-
-tasks.jarJar.finalizedBy('reobfJar')
-jar.finalizedBy('reobfJarJar')
-
-reobf {
-    jarJar {}
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
 }
 
 tasks.jarJar.configure {
     archiveClassifier.set("")
-}
-
-jarJar {
-    enable()
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
 }
 
 task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
@@ -171,7 +86,7 @@ def updates = tasks.register("generateUpdates", Copy) {
     it.into '../files/'
 }
 
-tasks.generateUpdates.mustRunAfter('jar')
+tasks.generateUpdates.mustRunAfter('jar', 'sourcesJar')
 
 tasks.build.dependsOn('changelog', 'generateUpdates')
 
@@ -183,7 +98,7 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
         def mainFile = upload(project.ahcurseId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
         mainFile.changelog = file(changelogFile)
         mainFile.addJavaVersion("Java ${java_version}")
-        mainFile.addModLoader('Forge', 'NeoForge')
+        mainFile.addModLoader('NeoForge')
         mainFile.releaseType = "${release_type}"
         "${release_versions}".split(',').each {
             mainFile.addGameVersion("${it}")
@@ -209,7 +124,7 @@ modrinth {
         }
         uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
         gameVersions = "${release_versions}".split(",") as List<String>
-        loaders = ['neoforge', 'forge']
+        loaders = ['neoforge']
         dependencies {
             optional.project 'farmers-delight'
             optional.project 'fruitful-fun'

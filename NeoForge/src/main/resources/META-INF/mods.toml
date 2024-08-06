@@ -1,29 +1,30 @@
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
-issueTrackerURL="${issue_tracker}"
+loaderVersion="[1,)"
 license="${license}"
+issueTrackerURL="${issue_tracker}"
 logoFile="${mod_id}_icon.png"
 
+[[accessTransformers]]
+  file="META-INF/accesstransformer.cfg"
 [[mods]]
   modId="${mod_id}"
   displayName="${mod_name}"
   description="${mod_description}"
-  version="${version}"
+  version="${neoforge_mod_version}"
   updateJSONURL="https://raw.githubusercontent.com/wendall911/ActuallyHarvest/${mod_update_branch}/files/updates.json"
   authors="${mod_author}"
   credits="${mod_credits}"
   logoFile="${mod_id}_icon.png"
   itemIcon="minecraft:wheat"
-
 [[dependencies.${mod_id}]]
-    modId="forge"
-    mandatory=true
-    versionRange="${forge_version_range}"
+    modId="neoforge"
+    type="required"
+    versionRange="${neoforge_loader_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.${mod_id}]]
     modId="minecraft"
-    mandatory=true
-    versionRange="${forge_mc_version_range}"
+    type="required"
+    versionRange="${neoforge_mc_version_range}"
     ordering="NONE"
     side="BOTH"
