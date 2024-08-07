@@ -43,6 +43,9 @@ loom {
     if (project(":Common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
         accessWidenerPath.set(project(":Common").file("src/main/resources/${mod_id}.accesswidener"))
     }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
     runs {
         client {
             client()

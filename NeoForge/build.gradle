@@ -19,6 +19,12 @@ repositories {
 archivesBaseName = "${mod_id}"
 version = "${minecraft_version}-${mod_version}-FORGE"
 
+mixin {
+    add sourceSets.main, "${mod_id}-refmap.json"
+
+    config "${mod_id}.mixins.json"
+}
+
 minecraft {
     mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
 
@@ -35,6 +41,9 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            args "-mixin.config=${mod_id}.mixins.json"
             mods {
                 modClientRun {
                     source sourceSets.main
@@ -48,6 +57,9 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Server'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            args "-mixin.config=${mod_id}.mixins.json"
             mods {
                 modServerRun {
                     source sourceSets.main
@@ -92,7 +104,7 @@ tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
 def replaceProperties = [
     'version': version,
     'forge_mc_version_range': forge_mc_version_range,
