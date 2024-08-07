@@ -74,24 +74,26 @@ public class HarvestEventHandler {
         }
 
         BlockState above = level.getBlockState(pos.above());
+        int range = 1;
 
         if (isHoe) {
             if (BlockHelper.getInteractionTypeForBlock(blockState, true) == BlockHelper.InteractionType.NONE
                     && BlockHelper.getInteractionTypeForBlock(above, true) == BlockHelper.InteractionType.NONE) {
                 return ClickResult.pass();
             }
+            range = ToolHelper.getRange(heldStack);
         }
 
         boolean harvested = false;
 
-        for (int x = 0; x < 1; x++) {
-            for (int z = 0; z < 1; z++) {
+        for (int x = 1 - range; x < range; x++) {
+            for (int z = 1 - range; z < range; z++) {
                 BlockPos shiftPos = pos.offset(x, 0, z);
 
-                if (!tryHarvest(level, shiftPos, player, hand, true)) {
+                if (!tryHarvest(level, shiftPos, player, hand, range > 1)) {
                     shiftPos = shiftPos.above();
 
-                    if (tryHarvest(level, shiftPos, player, hand, true)) {
+                    if (tryHarvest(level, shiftPos, player, hand, range > 1)) {
                         harvested = true;
                     }
                 }
@@ -102,10 +104,6 @@ public class HarvestEventHandler {
         }
 
         if (!harvested) return ClickResult.pass();
-
-        if (!level.isClientSide && ConfigHandler.Common.damageTool()) {
-            heldStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
-        }
 
         return ClickResult.interrupt();
     }
@@ -145,11 +143,13 @@ public class HarvestEventHandler {
 
         if (level instanceof ServerLevel serverLevel) {
             ItemStack copy;
+            ItemStack heldStack = null;
 
             if (entity == null || hand == null) {
                 copy = new ItemStack(Items.STICK);
             }
             else {
+                heldStack = entity.getItemInHand(hand);
                 copy = entity.getItemInHand(hand).copy();
             }
 
@@ -175,6 +175,11 @@ public class HarvestEventHandler {
             level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(cropBlockState));
             level.setBlockAndUpdate(pos, cropBlockState);
             level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
+
+
+            if (heldStack != null && !level.isClientSide && ConfigHandler.Common.damageTool()) {
+                heldStack.hurtAndBreak(1, entity, EquipmentSlot.MAINHAND);
+            }
         }
 
         return true;

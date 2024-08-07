@@ -3,12 +3,21 @@ package actuallyharvest.config;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.component.Tool;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -25,6 +34,7 @@ import net.minecraft.world.level.block.GrowingPlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import actuallyharvest.util.BlockHelper;
+import actuallyharvest.util.ToolHelper;
 
 public class ConfigHandler {
 
@@ -41,8 +51,8 @@ public class ConfigHandler {
 
     public static void init() {
         Common.crops.clear();
-        Common.cropBlocks.clear();
         Common.rightClickBlocks.clear();
+        Common.hoeTools.clear();
 
         if (Common.autoConfigMods()) {
             for (Block block : BuiltInRegistries.BLOCK) {
@@ -84,7 +94,38 @@ public class ConfigHandler {
             }
         }
 
-        Common.crops.values().forEach(bs -> Common.cropBlocks.add(bs.getBlock()));
+        BuiltInRegistries.ITEM.forEach(item -> {
+            if (item instanceof DiggerItem digger) {
+                Tool tool = digger.components().get(DataComponents.TOOL);
+                TagKey<Block> tagKey = null;
+
+                if (tool != null) {
+                    for (Tool.Rule rule : tool.rules()) {
+                        if (rule.correctForDrops().isPresent()) {
+                            Optional<TagKey<Block>> optionalBlockTagKey = rule.blocks().unwrapKey();
+
+                            if (optionalBlockTagKey.isPresent()) {
+                                tagKey = optionalBlockTagKey.get();
+                            }
+                         }
+                    }
+                }
+
+                if (tagKey == BlockTags.MINEABLE_WITH_HOE) {
+                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(Tiers.valueOf(digger.getTier().toString()).ordinal()));
+                }
+            }
+        });
+
+        // Add config overrides
+        for (String hoeItem : COMMON.hoeItems.get()) {
+            String[] parts = hoeItem.split("-");
+            int range = ToolHelper.getBaseRange(Integer.parseInt(parts[1]));
+            ResourceLocation loc = ResourceLocation.parse(parts[0]);
+            Item item = BuiltInRegistries.ITEM.get(loc);
+
+            Common.hoeTools.put(item, range);
+        }
     }
 
     public static class Common {
@@ -96,9 +137,14 @@ public class ConfigHandler {
         private final SpectreConfigSpec.IntValue xpFromHarvestAmount;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> harvestableCrops;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> harvestableBlocks;
+        private final SpectreConfigSpec.BooleanValue expandHoeRange;
+        private final SpectreConfigSpec.IntValue smallTierExpansionRange;
+        private final SpectreConfigSpec.IntValue highTierExpansionRange;
+        private final SpectreConfigSpec.BooleanValue expandHoeRangeEnchanted;
+        private final SpectreConfigSpec.IntValue maxHoeExpansionRange;
+        private final SpectreConfigSpec.ConfigValue<List<? extends String>> hoeItems;
 
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
-        private static final Set<Block> cropBlocks = Sets.newHashSet();
         private static final Set<Block> rightClickBlocks = Sets.newHashSet();
         private static final List<String> harvestableCropsList = List.of("harvestableCrops");
         private static final String[] defaultHarvestableCrops = new String[] {
@@ -119,6 +165,11 @@ public class ConfigHandler {
         };
         private static final Predicate<Object> resourceLocationValidator = s -> s instanceof String
             && ((String) s).matches("[a-z]+[:]{1}[a-z_]+");
+        private static final Map<Item, Integer> hoeTools = Maps.newHashMap();
+        private static final Predicate<Object> hoeItemValidator = s -> s instanceof String
+            && ((String) s).matches("[a-z][a-z0-9_]{1,63}+[:]{1}[a-z_]+[-]{1}[0-9]+");
+        private static final List<String> hoeItemList = List.of("hoeItems");
+        private static final String[] defaultHoeItemList = new String[] {};
 
         public Common(SpectreConfigSpec.Builder builder) {
             builder.push("general");
@@ -149,6 +200,24 @@ public class ConfigHandler {
                     + "For blocks like berry bushes that have built-in right click harvest."
                 )
                 .defineListAllowEmpty(harvestableBlocksList, getHarvestableBlocksList(), resourceLocationValidator);
+            expandHoeRange = builder
+                .comment("Expand hoe range based on tier.")
+                .define("expandHoeRange", true);
+            smallTierExpansionRange = builder
+                .comment("Regular hoe (gold, wood, iron) expansion range.")
+                .defineInRange("smallTierExpansionRange", 2, 1, 5);
+            highTierExpansionRange = builder
+                .comment("Regular hoe (gold, wood, iron) expansion range.")
+                .defineInRange("highTierExpansionRange", 3, 1, 5);
+            expandHoeRangeEnchanted = builder
+                .comment("Expand hoe range by 1 for each level of efficiency enchantment level.")
+                .define("expandHoeRangeEnchanted", true);
+            maxHoeExpansionRange = builder
+                .comment("Maximum range hoe can expand for harvesting. This is the maximum of tier + efficiency enchantment.")
+                .defineInRange("maxHoeExpansionRange", 11, 1, 11);
+            hoeItems = builder
+                .comment("List of individual hoe tools and their harvest tier. This is for modded items not covered. Format: minecraft:wooden_hoe-0 (with number being tier)")
+                .defineListAllowEmpty(hoeItemList, getHoeItems(), hoeItemValidator);
         }
 
         public static boolean allowEmptyHand() {
@@ -179,12 +248,40 @@ public class ConfigHandler {
             return crops;
         }
 
+        public static boolean expandHoeRange() {
+            return COMMON.expandHoeRange.get();
+        }
+
+        public static int smallTierExpansionRange() {
+            return COMMON.smallTierExpansionRange.get();
+        }
+
+        public static int highTierExpansionRange() {
+            return COMMON.highTierExpansionRange.get();
+        }
+
+        public static boolean expandHoeRangeEnchanted() {
+            return COMMON.expandHoeRangeEnchanted.get();
+        }
+
+        public static int maxHoeExpansionRange() {
+            return COMMON.maxHoeExpansionRange.get();
+        }
+
+        public static Map<Item, Integer> getHoeTools() {
+            return hoeTools;
+        }
+
         private static Supplier<List<? extends String>> getCropsList() {
             return () -> Arrays.asList(Common.defaultHarvestableCrops);
         }
 
         private static Supplier<List<? extends String>> getHarvestableBlocksList() {
             return () -> Arrays.asList(Common.defaultHarvestableBlocks);
+        }
+
+        private static Supplier<List<? extends String>> getHoeItems() {
+            return () -> Arrays.asList(Common.defaultHoeItemList);
         }
 
     }
