@@ -21,6 +21,9 @@
       "actuallyharvest.FabricConfigInitializer"
     ]
   },
+  "mixins": [
+    "actuallyharvest.mixins.json"
+  ],
   "depends": {
     "fabricloader": "${fabric_loader_min_version}",
     "fabric": "*",

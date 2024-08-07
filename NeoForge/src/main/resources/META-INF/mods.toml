@@ -16,6 +16,8 @@ logoFile="${mod_id}_icon.png"
   credits="${mod_credits}"
   logoFile="${mod_id}_icon.png"
   itemIcon="minecraft:wheat"
+[[mixins]]
+    config = "${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
