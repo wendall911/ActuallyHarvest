@@ -112,7 +112,13 @@ public class ConfigHandler {
                 }
 
                 if (tagKey == BlockTags.MINEABLE_WITH_HOE) {
-                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(Tiers.valueOf(digger.getTier().toString()).ordinal()));
+                    int tier = 0;
+
+                    try {
+                        tier = Tiers.valueOf(digger.getTier().toString()).ordinal();
+                    }
+                    catch(Exception ignore) {}
+                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(tier));
                 }
             }
         });
