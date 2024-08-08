@@ -95,7 +95,14 @@ public class ConfigHandler {
                 DiggerItemAccessor diggerAccessor = (DiggerItemAccessor) digger;
 
                 if (diggerAccessor.getBlocks() == BlockTags.MINEABLE_WITH_HOE) {
-                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(digger.getTier().getLevel()));
+                    int tier = 0;
+
+                    try {
+                        tier = digger.getTier().getLevel();
+                    }
+                    catch(Exception ignore) {}
+
+                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(tier));
                 }
             }
         });
