@@ -39,13 +39,13 @@ neoForge {
 }
 
 dependencies {
-    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}+${minecraft_version}"
-    jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}+${minecraft_version}"
+    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
+    jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
 
     // Testing mods
     //runtimeOnly "curse.maven:configured-457570:5340194"
     //runtimeOnly "curse.maven:catalogue-459701:5303328"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    runtimeOnly "mezz.jei:jei-1.21-neoforge:${jei_version}"
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_forge_version}"
     //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_forge_version}"
     //runtimeOnly "curse.maven:croptopia-415438:${croptopia_forge_version}"
