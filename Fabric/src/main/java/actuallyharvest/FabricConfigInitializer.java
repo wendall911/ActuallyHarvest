@@ -4,12 +4,16 @@ import com.illusivesoulworks.spectrelib.config.SpectreLibInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
+import actuallyharvest.config.ConfigHandler;
+
 public class FabricConfigInitializer implements SpectreLibInitializer {
 
     @Override
     public void onInitializeConfig() {
+        ActuallyHarvest.init();
+
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            ActuallyHarvest.init();
+            ConfigHandler.init();
         });
     }
 

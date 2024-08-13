@@ -4,6 +4,9 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+
+import actuallyharvest.config.ConfigHandler;
 
 public class ServerEventListener {
 
@@ -17,6 +20,11 @@ public class ServerEventListener {
             event.setUseBlock(Event.Result.DENY);
             event.setUseItem(Event.Result.DENY);
         }
+    }
+
+    @SubscribeEvent
+    public static void initConfig(final ServerStartingEvent event) {
+        ConfigHandler.init();
     }
 
 }
