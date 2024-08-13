@@ -1,9 +1,12 @@
 package actuallyharvest.event;
 
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import actuallyharvest.config.ConfigHandler;
 
 public class ServerEventListener {
 
@@ -17,6 +20,11 @@ public class ServerEventListener {
             event.setUseBlock(Event.Result.DENY);
             event.setUseItem(Event.Result.DENY);
         }
+    }
+
+    @SubscribeEvent
+    public static void initConfig(final ServerStartingEvent event) {
+        ConfigHandler.init();
     }
 
 }
