@@ -27,6 +27,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -137,6 +138,15 @@ public class HarvestEventHandler {
 
     private static boolean harvestAndReplant(Level level, BlockPos pos, BlockState blockState, LivingEntity entity, InteractionHand hand) {
         BlockState cropBlockState = ConfigHandler.Common.getCrops().get(blockState);
+        BlockState bottomBlockState = null;
+        BlockState above = level.getBlockState(pos.above());
+        boolean doubletall = false;
+
+        if (above.getBlock() instanceof CropBlock) {
+            bottomBlockState = ConfigHandler.Common.getCrops().get(blockState);
+            cropBlockState = ConfigHandler.Common.getCrops().get(above);
+            doubletall = true;
+        }
 
         if (cropBlockState == null) return false;
 
@@ -175,6 +185,11 @@ public class HarvestEventHandler {
             level.setBlockAndUpdate(pos, cropBlockState);
             level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
 
+            if (doubletall) {
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(bottomBlockState));
+                level.setBlockAndUpdate(pos, bottomBlockState);
+                level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
+            }
 
             if (heldStack != null && !level.isClientSide && ConfigHandler.Common.damageTool()) {
                 heldStack.hurtAndBreak(1, entity, (p) -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
