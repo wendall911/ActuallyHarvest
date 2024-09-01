@@ -47,6 +47,7 @@ dependencies {
     //runtimeOnly "curse.maven:catalogue-459701:5303328"
     runtimeOnly "mezz.jei:jei-1.21-neoforge:${jei_version}"
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_forge_version}"
+    //runtimeOnly "curse.maven:extra_delight-842106:5659546"
     //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_forge_version}"
     //runtimeOnly "curse.maven:croptopia-415438:${croptopia_forge_version}"
     //runtimeOnly "curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}"
