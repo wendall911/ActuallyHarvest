@@ -49,7 +49,7 @@ dependencies {
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_forge_version}"
     //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_forge_version}"
     //runtimeOnly "curse.maven:croptopia-415438:${croptopia_forge_version}"
-    runtimeOnly "curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}"
+    //runtimeOnly "curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}"
     //runtimeOnly "curse.maven:phc_crops-361385:${phc_crops_forge_version}"
     //runtimeOnly "curse.maven:phc_trees-365460:${phc_trees_forge_version}"
     //runtimeOnly "curse.maven:kiwi-303657:${kiwi_forge_version}"
