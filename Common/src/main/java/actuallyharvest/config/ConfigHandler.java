@@ -69,6 +69,8 @@ public class ConfigHandler {
                             maxAgeCropBlockstate = maxAgeCropBlockstate.setValue(upper, true);
                         }
 
+                        if (BlockHelper.isBottomBlock(block)) continue;
+
                         Common.crops.put(maxAgeCropBlockstate, cropBlockstate);
                     } else if ((block instanceof BushBlock || block instanceof GrowingPlantBlock)
                             && block instanceof BonemealableBlock) {

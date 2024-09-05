@@ -28,6 +28,10 @@ public class BlockHelper {
         return BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals("minecraft");
     }
 
+    public static boolean isBottomBlock(Block block) {
+        return BuiltInRegistries.BLOCK.getKey(block).getPath().contains("_bottom");
+    }
+
     public static String[] parseBlockString(String blockString) {
         boolean inBracket = false;
 
