@@ -85,6 +85,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     //runtimeOnly fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_forge_version}")
+    //runtimeOnly fg.deobf("curse.maven:mmlib-368098:5414924")
+    //runtimeOnly fg.deobf("curse.maven:corn_delight-577805:5361751")
     //runtimeOnly fg.deobf("curse.maven:ephero_lib-885449:${ephero_lib_forge_version}")
     //runtimeOnly fg.deobf("curse.maven:croptopia-415438:${croptopia_forge_version}")
     //runtimeOnly fg.deobf("curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}")
