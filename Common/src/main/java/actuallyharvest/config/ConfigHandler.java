@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import actuallyharvest.mixin.DiggerItemAccessor;
 import actuallyharvest.util.BlockHelper;
@@ -46,6 +47,8 @@ public class ConfigHandler {
     }
 
     public static void init() {
+        BooleanProperty upper = BooleanProperty.create("upper");
+
         Common.crops.clear();
         Common.rightClickBlocks.clear();
         Common.hoeTools.clear();
@@ -54,7 +57,15 @@ public class ConfigHandler {
             for (Block block : BuiltInRegistries.BLOCK) {
                 if (!BlockHelper.isVanilla(block)) {
                     if (block instanceof CropBlock cropBlock) {
-                        Common.crops.put(cropBlock.getStateForAge(cropBlock.getMaxAge()), cropBlock.defaultBlockState());
+                        BlockState cropBlockstate = cropBlock.defaultBlockState();
+                        BlockState maxAgeCropBlockstate = cropBlock.getStateForAge(cropBlock.getMaxAge());
+
+                        if (cropBlockstate.hasProperty(upper)) {
+                            cropBlockstate = cropBlockstate.setValue(upper, true);
+                            maxAgeCropBlockstate = maxAgeCropBlockstate.setValue(upper, true);
+                        }
+
+                        Common.crops.put(maxAgeCropBlockstate, cropBlockstate);
                     } else if ((block instanceof BushBlock || block instanceof GrowingPlantBlock)
                             && block instanceof BonemealableBlock) {
                         Common.rightClickBlocks.add(block);
