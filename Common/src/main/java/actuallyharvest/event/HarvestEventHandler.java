@@ -139,14 +139,10 @@ public class HarvestEventHandler {
 
     private static boolean harvestAndReplant(Level level, BlockPos pos, BlockState blockState, LivingEntity entity, InteractionHand hand) {
         BlockState cropBlockState = ConfigHandler.Common.getCrops().get(blockState);
-        BlockState bottomBlockState = null;
         BlockState above = level.getBlockState(pos.above());
-        boolean doubletall = false;
 
         if (above.getBlock() instanceof CropBlock) {
-            bottomBlockState = ConfigHandler.Common.getCrops().get(blockState);
             cropBlockState = ConfigHandler.Common.getCrops().get(above);
-            doubletall = true;
         }
 
         if (cropBlockState == null) return false;
@@ -185,12 +181,6 @@ public class HarvestEventHandler {
             level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(cropBlockState));
             level.setBlockAndUpdate(pos, cropBlockState);
             level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
-
-            if (doubletall) {
-                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(bottomBlockState));
-                level.setBlockAndUpdate(pos, bottomBlockState);
-                level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
-            }
 
             if (heldStack != null && !level.isClientSide && ConfigHandler.Common.damageTool()) {
                 heldStack.hurtAndBreak(1, entity, EquipmentSlot.MAINHAND);
