@@ -89,7 +89,7 @@ def publishFile = project(":").projectDir.toString() + "/Fabric/build/libs/${arc
 publishMods {
     file = file(publishFile)
     changelog = file(changelogFile).text
-    type = "${release_type}".equals("release") ? STABLE : ("${release_type}".equals("beta") ? BETA : ALPHA)
+    type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
     modLoaders.add('fabric')
 
     if (project.hasProperty('ahcurseApiKey')) {
