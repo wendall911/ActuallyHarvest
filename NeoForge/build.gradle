@@ -1,9 +1,8 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.gradle.userdev'
-    id 'net.darkhax.curseforgegradle'
     id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.71.8'
-    id 'com.modrinth.minotaur'
+	id 'me.modmuss50.mod-publish-plugin'
 }
 
 archivesBaseName = "${mod_id}"
@@ -91,44 +90,42 @@ tasks.generateUpdates.mustRunAfter('jar', 'sourcesJar')
 tasks.build.dependsOn('changelog', 'generateUpdates')
 
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
+def publishFile = project(":").projectDir.toString() + "/NeoForge/build/libs/${archivesBaseName}-${version}.jar"
 
-task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+publishMods {
+    file = file(publishFile)
+    changelog = file(changelogFile).text
+    type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
+    modLoaders.add('neoforge')
+
     if (project.hasProperty('ahcurseApiKey')) {
-        apiToken = project.ahcurseApiKey
-        def mainFile = upload(project.ahcurseId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
-        mainFile.changelog = file(changelogFile)
-        mainFile.addJavaVersion("Java ${java_version}")
-        mainFile.addModLoader('NeoForge')
-        mainFile.releaseType = "${release_type}"
-        "${release_versions}".split(',').each {
-            mainFile.addGameVersion("${it}")
+        curseforge {
+            accessToken = project.ahcurseApiKey
+            projectId = project.ahcurseId
+            javaVersions.add(JavaVersion.toVersion("${java_version}"))
+            clientRequired = true
+            serverRequired = true
+            minecraftVersions.addAll("${release_versions}".split(','))
+            embeds('spectrelib')
+            optional('configured')
+            optional('catalogue')
+			optional('farmers-delight')
+			optional('the-veggie-way')
+			optional('pams-harvestcraft-2-crops')
+			optional('pams-harvestcraft-2-trees')
+			optional('fruit-trees')
+			optional('croptopia')
         }
-        mainFile.addOptional('configured')
-        mainFile.addOptional('catalogue')
-        mainFile.addOptional('farmers-delight')
-        mainFile.addOptional('the-veggie-way')
-        mainFile.addOptional('pams-harvestcraft-2-crops')
-        mainFile.addOptional('pams-harvestcraft-2-trees')
-        mainFile.addOptional('fruit-trees')
-        mainFile.addOptional('croptopia')
     }
-}
-
-modrinth {
     if (project.hasProperty('ahModrinthId')) {
-        token = project.modrinthKey
-        projectId = project.ahModrinthId
-        version = getVersion()
-        versionType = "${release_type}"
-        if (file(changelogFile).exists()) {
-            changelog = file(changelogFile).text
+        modrinth {
+            accessToken = project.modrinthKey
+            projectId = project.ahModrinthId
+            minecraftVersions.addAll("${release_versions}".split(','))
+            optional('farmers-delight')
+            optional('fruitful-fun')
         }
-        uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
-        gameVersions = "${release_versions}".split(",") as List<String>
-        loaders = ['neoforge']
-        dependencies {
-            optional.project 'farmers-delight'
-            optional.project 'fruitful-fun'
-        }
+    }
+    if (project.hasProperty('ahGithubToken')) {
     }
 }
