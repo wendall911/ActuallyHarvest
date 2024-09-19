@@ -26,13 +26,17 @@ dependencies {
     include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-fabric', version: "${spectrelib_version}"
 
     // Testing Mods
-    //modRuntimeOnly "curse.maven:mod-XXX:XXX"
+    //modRuntimeOnly "curse.maven:epherolib-885449:5439828"
+    //modRuntimeOnly "curse.maven:croptopia-415438:5571673"
 }
 
 loom {
     def aw = project(":Common").file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
     }
     runs {
         client {
