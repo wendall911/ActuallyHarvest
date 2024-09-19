@@ -10,6 +10,7 @@
 package actuallyharvest.event;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.tuple.Pair;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -114,13 +115,14 @@ public class HarvestEventHandler {
             return false;
         }
 
-        BlockState blockState = level.getBlockState(pos);
+        Pair<BlockState, Boolean> blockStatePair = BlockHelper.getModifiedState(level.getBlockState(pos));
+        BlockState blockState = blockStatePair.getLeft();
         BlockHelper.InteractionType interactionType = BlockHelper.getInteractionTypeForBlock(blockState, canReach);
 
         if (interactionType != BlockHelper.InteractionType.NONE) {
             if (interactionType == BlockHelper.InteractionType.HARVEST) {
                 if (entity instanceof Player) {
-                    return harvestAndReplant(level, pos, blockState, entity, hand);
+                    return harvestAndReplant(level, pos, blockState, entity, hand, blockStatePair.getRight());
                 }
             }
             else if (interactionType == BlockHelper.InteractionType.CLICK && entity instanceof Player) {
@@ -137,11 +139,11 @@ public class HarvestEventHandler {
         return false;
     }
 
-    private static boolean harvestAndReplant(Level level, BlockPos pos, BlockState blockState, LivingEntity entity, InteractionHand hand) {
+    private static boolean harvestAndReplant(Level level, BlockPos pos, BlockState blockState, LivingEntity entity, InteractionHand hand, boolean treeCrop) {
         BlockState cropBlockState = ConfigHandler.Common.getCrops().get(blockState);
         BlockState above = level.getBlockState(pos.above());
 
-        if (above.getBlock() instanceof CropBlock) {
+        if (!treeCrop && above.getBlock() instanceof CropBlock) {
             cropBlockState = ConfigHandler.Common.getCrops().get(above);
         }
 

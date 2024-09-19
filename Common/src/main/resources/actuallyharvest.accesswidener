@@ -3,3 +3,4 @@ accessible field net/minecraft/world/item/AxeItem STRIPPABLES Ljava/util/Map;
 mutable field net/minecraft/world/item/AxeItem STRIPPABLES Ljava/util/Map;
 accessible field net/minecraft/world/item/ShovelItem FLATTENABLES Ljava/util/Map;
 mutable field net/minecraft/world/item/ShovelItem FLATTENABLES Ljava/util/Map;
+accessible method net/minecraft/block/CropBlock getAgeProperty ()Lnet/minecraft/state/property/IntProperty;

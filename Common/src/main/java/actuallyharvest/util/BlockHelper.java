@@ -1,6 +1,9 @@
 package actuallyharvest.util;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -15,12 +18,14 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
 import actuallyharvest.common.TagManager;
 import actuallyharvest.config.ConfigHandler;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class BlockHelper {
 
@@ -89,6 +94,8 @@ public class BlockHelper {
     }
 
     public static InteractionType getInteractionTypeForBlock(BlockState state, boolean canRightClick) {
+        state = getModifiedState(state).getLeft();
+
         if (state.is(TagManager.Blocks.HARVEST_BLACKLIST)) {
             return InteractionType.NONE;
         }
@@ -100,6 +107,27 @@ public class BlockHelper {
         }
 
         return InteractionType.NONE;
+    }
+
+    public static Pair<BlockState, Boolean> getModifiedState(BlockState state) {
+        IntegerProperty distance = IntegerProperty.create("distance", 1, 7);
+        AtomicBoolean useDefault = new AtomicBoolean(false);
+
+        state.getProperties().forEach(property -> {
+            if (property.equals(distance)) {
+                useDefault.set(true);
+            }
+        });
+
+        if (useDefault.get()) {
+            Block block = BuiltInRegistries.BLOCK.get(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
+            if (block instanceof CropBlock cropBlock) {
+                Integer age = state.getValue(cropBlock.getAgeProperty());
+                state = cropBlock.defaultBlockState().setValue(cropBlock.getAgeProperty(), age);
+            }
+        }
+
+        return Pair.of(state, useDefault.get());
     }
 
     private static BlockState getAxeStrippingState(BlockState state) {
