@@ -43,8 +43,8 @@ dependencies {
     jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
 
     // Testing mods
-    //runtimeOnly "curse.maven:configured-457570:5340194"
-    //runtimeOnly "curse.maven:catalogue-459701:5303328"
+    //runtimeOnly "curse.maven:configured-457570:5441232"
+    //runtimeOnly "curse.maven:catalogue-459701:5631367"
     runtimeOnly "mezz.jei:jei-1.21-neoforge:${jei_version}"
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_forge_version}"
     //runtimeOnly "curse.maven:extra_delight-842106:5659546"
