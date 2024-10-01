@@ -26,8 +26,8 @@ dependencies {
     include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-fabric', version: "${spectrelib_version}"
 
     // Testing Mods
-    //modRuntimeOnly "curse.maven:epherolib-885449:5439828"
-    //modRuntimeOnly "curse.maven:croptopia-415438:5571673"
+    //modRuntimeOnly "curse.maven:epherolib-885449:${ephero_lib_fabric_version}"
+    //modRuntimeOnly "curse.maven:croptopia-415438:${croptopia_fabric_version}"
 }
 
 loom {
