@@ -11,12 +11,13 @@ import java.util.function.Supplier;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.Tool;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -100,10 +101,10 @@ public class ConfigHandler {
         }
 
         for (String blockKey : COMMON.harvestableBlocks.get()) {
-            Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(blockKey));
+            Optional<Holder.Reference<Block>> blockReference = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(blockKey));
 
-            if (block != Blocks.AIR) {
-                Common.rightClickBlocks.add(block);
+            if (blockReference.isPresent() && blockReference.get().value() != Blocks.AIR) {
+                Common.rightClickBlocks.add(blockReference.get().value());
             }
         }
 
@@ -111,6 +112,7 @@ public class ConfigHandler {
             if (item instanceof DiggerItem digger) {
                 Tool tool = digger.components().get(DataComponents.TOOL);
                 TagKey<Block> tagKey = null;
+                HolderSet<Block> blocks = null;
 
                 if (tool != null) {
                     for (Tool.Rule rule : tool.rules()) {
@@ -119,19 +121,14 @@ public class ConfigHandler {
 
                             if (optionalBlockTagKey.isPresent()) {
                                 tagKey = optionalBlockTagKey.get();
+                                blocks = rule.blocks();
                             }
                          }
                     }
                 }
 
                 if (tagKey == BlockTags.MINEABLE_WITH_HOE) {
-                    int tier = 0;
-
-                    try {
-                        tier = Tiers.valueOf(digger.getTier().toString()).ordinal();
-                    }
-                    catch(Exception ignore) {}
-                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(tier));
+                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(ToolHelper.getToolTier(blocks)));
                 }
             }
         });
@@ -141,9 +138,9 @@ public class ConfigHandler {
             String[] parts = hoeItem.split("-");
             int range = ToolHelper.getBaseRange(Integer.parseInt(parts[1]));
             ResourceLocation loc = ResourceLocation.parse(parts[0]);
-            Item item = BuiltInRegistries.ITEM.get(loc);
+            Optional<Holder.Reference<Item>> itemReference = BuiltInRegistries.ITEM.get(loc);
 
-            Common.hoeTools.put(item, range);
+            itemReference.ifPresent(reference -> Common.hoeTools.put(reference.value(), range));
         }
     }
 

@@ -3,6 +3,8 @@ package actuallyharvest.util;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.brigadier.StringReader;
@@ -63,7 +65,7 @@ public class BlockHelper {
     public static BlockState fromString(String key) {
         try {
             BlockStateParser.BlockResult result =
-                BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), new StringReader(key), false);
+                BlockStateParser.parseForBlock(BlockHolderLookup.asLookup(), new StringReader(key), false);
 
             return result.blockState();
         } catch (CommandSyntaxException e) {
@@ -120,7 +122,13 @@ public class BlockHelper {
         });
 
         if (useDefault.get()) {
-            Block block = BuiltInRegistries.BLOCK.get(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
+            Block block = null;
+            Optional<Holder.Reference<Block>> optionalBlock = BuiltInRegistries.BLOCK.get(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
+
+            if (optionalBlock.isPresent()) {
+                block = optionalBlock.get().value();
+            }
+
             if (block instanceof CropBlock cropBlock) {
                 Integer age = state.getValue(cropBlock.getAgeProperty());
                 state = cropBlock.defaultBlockState().setValue(cropBlock.getAgeProperty(), age);
