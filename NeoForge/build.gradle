@@ -110,7 +110,6 @@ publishMods {
             optional('configured')
             optional('catalogue')
 			optional('farmers-delight')
-			optional('the-veggie-way')
 			optional('pams-harvestcraft-2-crops')
 			optional('pams-harvestcraft-2-trees')
 			optional('fruit-trees')
