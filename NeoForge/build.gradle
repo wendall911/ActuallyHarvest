@@ -10,10 +10,11 @@ version = neoforge_mod_version
 
 neoForge {
     version = neoforge_version
+    validateAccessTransformers = true
     // Automatically enable neoforge AccessTransformers if the file exists
     def at = project(':Common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformers.add(at.absolutePath)
+        accessTransformers.from(at.absolutePath)
     }
     parchment {
         minecraftVersion = parchment_mc_version
@@ -45,7 +46,7 @@ dependencies {
     // Testing mods
     //runtimeOnly "curse.maven:configured-457570:5441232"
     //runtimeOnly "curse.maven:catalogue-459701:5631367"
-    runtimeOnly "mezz.jei:jei-1.21-neoforge:${jei_version}"
+    //runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_forge_version}"
     //runtimeOnly "curse.maven:extra_delight-842106:5659546"
     //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_forge_version}"
