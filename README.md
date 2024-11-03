@@ -1,5 +1,7 @@
-# ActuallyHarvest [![Project](http://cf.way2muchnoise.eu/full_1076278_downloads.svg)](https://minecraft.curseforge.com/projects/1076278)
-![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_1076278_all.svg)
+# ActuallyHarvest [![Project](http://cf.way2muchnoise.eu/full_1076278_downloads.svg)](https://minecraft.curseforge.com/projects/1076278) [![Project](https://modrinth.roughness.technology/full_actually-harvest_downloads.svg)](https://modrinth.com/mod/actually-harvest)
+[![](https://modrinth.roughness.technology/versions/actually-harvest.svg)](https://modrinth.com/mod/actually-harvest/versions)
+[![](https://img.shields.io/badge/NeoForge-20+-orange.svg?longCache=true&style=flat)](https://www.curseforge.com/minecraft/mc-mods/actually-harvest/files?gameVersionTypeId=6)
+[![](https://img.shields.io/badge/Fabric-0.83.0+-yellowgreen.svg?longCache=true&style=flat)](https://www.curseforge.com/minecraft/mc-mods/actually-harvest/files?gameVersionTypeId=4)
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat)
 
 A mod that actually works with right click harvest for both Forge and Fabric. There are a ton of options out there. All require an external library and they are flaky! Either they don't work at all, or require manual configuration for all the common farming and foods mods (and there aren't very many).
@@ -52,10 +54,6 @@ There are possible conflicts with using other right click harvest features in ot
 	#List of individual hoe tools and their harvest tier. This is for modded items not covered. Format: minecraft:wooden_hoe-0 (with number being tier)
 	hoeItems = []
 ```
-
-All Downloads:
-
-[![Files](https://curse.nikky.moe/api/img/1076278/files?logo)](https://minecraft.curseforge.com/projects/1076278/files)
 
 ## Links of Interest
 
