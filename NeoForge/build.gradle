@@ -57,6 +57,11 @@ dependencies {
     //runtimeOnly "curse.maven:kiwi-303657:${kiwi_forge_version}"
     //runtimeOnly "curse.maven:lychee-567403:${lychee_forge_version}"
     //runtimeOnly "curse.maven:fruittrees-355467:${fruit_trees_forge_version}"
+    //runtimeOnly "curse.maven:terrablender-940057:${terrablender_version}"
+    //runtimeOnly "curse.maven:byg-1070751:${byg_version}"
+    //runtimeOnly "curse.maven:tyg-962544:${tyg_version}"
+    //runtimeOnly "curse.maven:corgilib-693313:${corgilib_version}"
+    //runtimeOnly "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 }
 
 shadowJar {
