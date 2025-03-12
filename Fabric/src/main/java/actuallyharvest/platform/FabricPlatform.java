@@ -1,11 +1,12 @@
 package actuallyharvest.platform;
 
+import net.minecraft.world.entity.player.Player;
+
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.loader.api.FabricLoader;
 
 import actuallyharvest.platform.services.IPlatform;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class FabricPlatform implements IPlatform {
 
@@ -17,6 +18,11 @@ public class FabricPlatform implements IPlatform {
 	@Override
     public boolean isPhysicalClient() {
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
+    }
+
+    @Override
+    public boolean isFakePlayer(Player player) {
+        return player instanceof FakePlayer;
     }
 
 }

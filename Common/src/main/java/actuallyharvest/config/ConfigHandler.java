@@ -149,6 +149,7 @@ public class ConfigHandler {
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> hoeItems;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistCrops;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistMods;
+        private final SpectreConfigSpec.BooleanValue allowFakePlayer;
 
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
         private static final Set<Block> rightClickBlocks = Sets.newHashSet();
@@ -237,6 +238,9 @@ public class ConfigHandler {
             blacklistMods = builder
                 .comment("List of mods to blacklist from right-click harvest. Format: \"modid\"")
                 .defineListAllowEmpty(blacklistModsList, getBlacklistMods(), modidValidator);
+            allowFakePlayer = builder
+                .comment("Allow machines, like Create's deployer, to harvest crops.")
+                .define("allowFakePlayer", true);
         }
 
         public static boolean allowEmptyHand() {
@@ -289,6 +293,10 @@ public class ConfigHandler {
 
         public static Map<Item, Integer> getHoeTools() {
             return hoeTools;
+        }
+
+        public static boolean allowFakePlayer() {
+            return COMMON.allowFakePlayer.get();
         }
 
         private static Supplier<List<? extends String>> getCropsList() {

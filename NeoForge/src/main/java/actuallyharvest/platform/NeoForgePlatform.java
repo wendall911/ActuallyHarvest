@@ -1,6 +1,9 @@
 package actuallyharvest.platform;
 
+import net.minecraft.world.entity.player.Player;
+
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
@@ -18,5 +21,9 @@ public class NeoForgePlatform implements IPlatform {
         return FMLLoader.getDist() == Dist.CLIENT;
     }
 
-}
+    @Override
+    public boolean isFakePlayer(Player player) {
+        return player instanceof FakePlayer;
+    }
 
+}

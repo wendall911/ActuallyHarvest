@@ -45,7 +45,7 @@ public class HarvestEventHandler {
     private static boolean isHarvesting = false;
 
     public static ClickResult rightClickBlock(Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitResult) {
-        if (player.level().isClientSide() || isHarvesting) return ClickResult.pass();
+        if (player.level().isClientSide() || isHarvesting || !BlockHelper.playerCanHarvest(player)) return ClickResult.pass();
 
         isHarvesting = true;
 
