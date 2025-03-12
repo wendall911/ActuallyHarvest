@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.ItemStack;
@@ -25,11 +26,15 @@ import actuallyharvest.config.ConfigHandler;
 public class BlockHelper {
 
     public static boolean isVanilla(Block block) {
-        return BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals("minecraft");
+        return getBlockId(block).getNamespace().equals("minecraft");
     }
 
     public static boolean isBottomBlock(Block block) {
-        return BuiltInRegistries.BLOCK.getKey(block).getPath().contains("_bottom");
+        return getBlockId(block).getPath().contains("_bottom");
+    }
+
+    public static ResourceLocation getBlockId(Block block) {
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 
     public static String[] parseBlockString(String blockString) {
