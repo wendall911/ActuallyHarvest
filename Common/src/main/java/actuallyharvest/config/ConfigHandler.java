@@ -155,6 +155,8 @@ public class ConfigHandler {
         private final SpectreConfigSpec.BooleanValue autoConfigMods;
         private final SpectreConfigSpec.IntValue xpFromHarvestChance;
         private final SpectreConfigSpec.IntValue xpFromHarvestAmount;
+        private final SpectreConfigSpec.BooleanValue xpFromHarvestUseRange;
+        private final SpectreConfigSpec.ConfigValue<String> xpFromHarvestRangeAmount;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> harvestableCrops;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> harvestableBlocks;
         private final SpectreConfigSpec.BooleanValue expandHoeRange;
@@ -194,6 +196,8 @@ public class ConfigHandler {
         private static final Map<Item, Integer> hoeTools = Maps.newHashMap();
         private static final Predicate<Object> hoeItemValidator = s -> s instanceof String
             && ((String) s).matches("[a-z][a-z0-9_]{1,63}+[:]{1}[a-z_]+[-]{1}[0-9]+");
+        private static final Predicate<Object> xpRangeValidator = s -> s instanceof String
+            && ((String) s).matches("[0-9]+[-]{1}[0-9]+");
         private static final List<String> hoeItemList = List.of("hoeItems");
         private static final String[] defaultHoeItemList = new String[] {};
         private static final List<String> blacklistCropsList = List.of("blacklistCrops");
@@ -218,6 +222,12 @@ public class ConfigHandler {
             xpFromHarvestAmount = builder
                 .comment("Amount of XP dropped on harvest.")
                 .defineInRange("xpFromHarvestAmount", 1, 0, 10);
+            xpFromHarvestUseRange = builder
+                .comment("Use range for XP drop, instead of set amount.")
+                .define("xpFromHarvestUseRange", false);
+            xpFromHarvestRangeAmount = builder
+                .comment("Range of XP dropped on harvest. Format: \"min-max\", example: \"0-3\"")
+                .define("xpFromHarvestRangeAmount", "0-3", xpRangeValidator);
             harvestableCrops = builder
                 .comment(
                     "Harvestable crops.\n"
@@ -277,6 +287,23 @@ public class ConfigHandler {
 
         public static int xpFromHarvestAmount() {
             return COMMON.xpFromHarvestAmount.get();
+        }
+
+        public static boolean xpFromHarvestUseRange() {
+            return COMMON.xpFromHarvestUseRange.get();
+        }
+
+        public static Pair<Integer, Integer> xpFromHarvestRangeAmount() {
+            String[] amounts = COMMON.xpFromHarvestRangeAmount.get().split("-");
+            int left = Integer.parseInt(amounts[0]);
+            int right = Integer.parseInt(amounts[1]);
+
+            // If the left value is greater than the right value, return default values
+            if (left > right) {
+                return Pair.of(0, 3);
+            }
+
+            return Pair.of(left, right);
         }
 
         public static Set<Block> getRightClickBlocks() {
