@@ -28,6 +28,8 @@ dependencies {
     // Testing Mods
     //modRuntimeOnly "curse.maven:epherolib-885449:${ephero_lib_fabric_version}"
     //modRuntimeOnly "curse.maven:croptopia-415438:${croptopia_fabric_version}"
+    //modRuntimeOnly "curse.maven:architectury-419699:${architectury_fabric_version}"
+    //modRuntimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
 }
 
 loom {
