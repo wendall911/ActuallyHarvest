@@ -64,6 +64,7 @@ dependencies {
     //runtimeOnly "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     //runtimeOnly "curse.maven:architectury-419699:${architectury_neoforge_version}"
     //runtimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
+    //runtimeOnly "curse.maven:create-328085:${create_version}"
 }
 
 shadowJar {
