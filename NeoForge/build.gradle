@@ -74,9 +74,10 @@ dependencies {
     compileOnly project(":Common")
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
-    jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {
-        jarJar.pin(it, "${spectrelib_version}")
+    implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_version}+${minecraft_version}")
+    jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_version}+${minecraft_version}") {
+        jarJar.pin(it, "${spectrelib_version}+${minecraft_version}")
+        jarJar.ranged(it, "${spectrelib_range}")
     }
 
     // Testing mods
