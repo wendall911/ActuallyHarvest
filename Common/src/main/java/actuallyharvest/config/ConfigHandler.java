@@ -60,7 +60,7 @@ public class ConfigHandler {
 
         if (Common.autoConfigMods()) {
             for (Block block : BuiltInRegistries.BLOCK) {
-                if (!BlockHelper.isVanilla(block)) {
+                if (!BlockHelper.isVanilla(block) && !Common.isBlacklistMod(block) && !Common.isBlacklistCrop(block)) {
                     if (block instanceof CropBlock cropBlock) {
                         BlockState cropBlockstate = cropBlock.defaultBlockState();
                         BlockState maxAgeCropBlockstate = cropBlock.getStateForAge(cropBlock.getMaxAge());
@@ -87,13 +87,14 @@ public class ConfigHandler {
             String[] parts = BlockHelper.parseBlockString(cropKey);
 
             initial = BlockHelper.fromString(cropKey);
+            Block block = initial.getBlock();
 
-            if (initial.getBlock() != Blocks.AIR) {
+            if (block != Blocks.AIR && !Common.isBlacklistCrop(block) && !Common.isBlacklistMod(block)) {
                 if (parts.length > 1) {
                     result = BlockHelper.fromString(parts[1]);
                 }
                 else {
-                    result = initial.getBlock().defaultBlockState();
+                    result = block.defaultBlockState();
                 }
 
                 Common.crops.put(initial, result);
@@ -103,7 +104,7 @@ public class ConfigHandler {
         for (String blockKey : COMMON.harvestableBlocks.get()) {
             Optional<Holder.Reference<Block>> blockReference = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(blockKey));
 
-            if (blockReference.isPresent() && blockReference.get().value() != Blocks.AIR) {
+            if (blockReference.isPresent() && blockReference.get().value() != Blocks.AIR && !Common.isBlacklistMod(blockReference.get().value())) {
                 Common.rightClickBlocks.add(blockReference.get().value());
             }
         }
@@ -159,6 +160,8 @@ public class ConfigHandler {
         private final SpectreConfigSpec.BooleanValue expandHoeRangeEnchanted;
         private final SpectreConfigSpec.IntValue maxHoeExpansionRange;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> hoeItems;
+        private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistCrops;
+        private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistMods;
 
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
         private static final Set<Block> rightClickBlocks = Sets.newHashSet();
@@ -181,11 +184,18 @@ public class ConfigHandler {
         };
         private static final Predicate<Object> resourceLocationValidator = s -> s instanceof String
             && ((String) s).matches("[a-z]+[:]{1}[a-z_]+");
+        // See: https://github.com/MinecraftForge/MinecraftForge/blob/1.18.x/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModInfo.java
+        private static final Predicate<Object> modidValidator = s -> s instanceof String
+            && ((String) s).matches("^[a-z][a-z0-9_]{1,63}$");
         private static final Map<Item, Integer> hoeTools = Maps.newHashMap();
         private static final Predicate<Object> hoeItemValidator = s -> s instanceof String
             && ((String) s).matches("[a-z][a-z0-9_]{1,63}+[:]{1}[a-z_]+[-]{1}[0-9]+");
         private static final List<String> hoeItemList = List.of("hoeItems");
         private static final String[] defaultHoeItemList = new String[] {};
+        private static final List<String> blacklistCropsList = List.of("blacklistCrops");
+        private static final String[] defaultBlacklistCrops = new String[] {};
+        private static final List<String> blacklistModsList = List.of("blacklistMods");
+        private static final String[] defaultBlacklistMods = new String[] {};
 
         public Common(SpectreConfigSpec.Builder builder) {
             builder.push("general");
@@ -234,6 +244,12 @@ public class ConfigHandler {
             hoeItems = builder
                 .comment("List of individual hoe tools and their harvest tier. This is for modded items not covered. Format: minecraft:wooden_hoe-0 (with number being tier)")
                 .defineListAllowEmpty(hoeItemList, getHoeItems(), hoeItemValidator);
+            blacklistCrops = builder
+                .comment("List of crops to blacklist from right-click harvest. Format: \"modid:block\"")
+                .defineListAllowEmpty(blacklistCropsList, getBlacklistCrops(), resourceLocationValidator);
+            blacklistMods = builder
+                .comment("List of mods to blacklist from right-click harvest. Format: \"modid\"")
+                .defineListAllowEmpty(blacklistModsList, getBlacklistMods(), modidValidator);
         }
 
         public static boolean allowEmptyHand() {
@@ -298,6 +314,22 @@ public class ConfigHandler {
 
         private static Supplier<List<? extends String>> getHoeItems() {
             return () -> Arrays.asList(Common.defaultHoeItemList);
+        }
+
+        private static Supplier<List<? extends String>> getBlacklistCrops() {
+            return () -> Arrays.asList(Common.defaultBlacklistCrops);
+        }
+
+        private static Supplier<List<? extends String>> getBlacklistMods() {
+            return () -> Arrays.asList(Common.defaultBlacklistMods);
+        }
+
+        private static boolean isBlacklistCrop(Block block) {
+            return COMMON.blacklistCrops.get().contains(BlockHelper.getBlockId(block).toString());
+        }
+
+        private static boolean isBlacklistMod(Block block) {
+            return COMMON.blacklistMods.get().contains(BlockHelper.getBlockId(block).getNamespace());
         }
 
     }
