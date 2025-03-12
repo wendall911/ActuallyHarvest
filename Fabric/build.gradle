@@ -36,6 +36,8 @@ dependencies {
 
     // Testing Mods
     //modRuntimeOnly "curse.maven:mod-XXX:XXX"
+    //modRuntimeOnly "curse.maven:architectury-419699:${architectury_fabric_version}"
+    //modRuntimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
 }
 
 loom {
