@@ -9,6 +9,8 @@
  */
 package actuallyharvest.event;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -176,7 +178,14 @@ public class HarvestEventHandler {
             boolean dropXp = entity instanceof Player;
             blockState.spawnAfterBreak(serverLevel, pos, copy, dropXp);
 
-            if (dropXp && ActuallyHarvest.RANDOM.nextInt(100) + 1 <= ConfigHandler.Common.xpFromHarvestChance()) {
+            if (dropXp && ConfigHandler.Common.xpFromHarvestUseRange()) {
+                int xp = ThreadLocalRandom.current().nextInt(ConfigHandler.Common.xpFromHarvestRangeAmount().getLeft(), ConfigHandler.Common.xpFromHarvestRangeAmount().getRight() + 1);
+
+                if (xp > 0) {
+                    ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), xp);
+                }
+            }
+            else if (dropXp && ActuallyHarvest.RANDOM.nextInt(100) + 1 <= ConfigHandler.Common.xpFromHarvestChance()) {
                 ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), ConfigHandler.Common.xpFromHarvestAmount());
             }
 
