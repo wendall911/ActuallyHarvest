@@ -30,8 +30,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -141,6 +144,7 @@ public class HarvestEventHandler {
     private static boolean harvestAndReplant(Level level, BlockPos pos, BlockState blockState, LivingEntity entity, InteractionHand hand) {
         BlockState cropBlockState = ConfigHandler.Common.getCrops().get(blockState);
         BlockState above = level.getBlockState(pos.above());
+        BooleanProperty top = BooleanProperty.create("top");
 
         if (above.getBlock() instanceof CropBlock) {
             cropBlockState = ConfigHandler.Common.getCrops().get(above);
@@ -162,18 +166,22 @@ public class HarvestEventHandler {
 
             MutableBoolean hasTaken = new MutableBoolean(false);
             Item blockItem = blockState.getBlock().asItem();
-            Block.getDrops(blockState, serverLevel, pos, level.getBlockEntity(pos), entity, copy).forEach((stack) -> {
-                if (stack.getItem() == blockItem && !hasTaken.getValue()) {
-                    stack.shrink(1);
-                    hasTaken.setValue(true);
-                }
-
-                if (!stack.isEmpty()) {
-                    Block.popResource(level, pos, stack);
-                }
-            });
             boolean dropXp = entity instanceof Player;
-            blockState.spawnAfterBreak(serverLevel, pos, copy, dropXp);
+
+            if (!cropBlockState.hasProperty(top)) {
+                Block.getDrops(blockState, serverLevel, pos, level.getBlockEntity(pos), entity, copy).forEach((stack) -> {
+                    if (stack.getItem() == blockItem && !hasTaken.getValue()) {
+                        stack.shrink(1);
+                        hasTaken.setValue(true);
+                    }
+
+                    if (!stack.isEmpty()) {
+                        Block.popResource(level, pos, stack);
+                    }
+                });
+
+                blockState.spawnAfterBreak(serverLevel, pos, copy, dropXp);
+            }
 
             if (dropXp && ConfigHandler.Common.xpFromHarvestUseRange()) {
                 int xp = ThreadLocalRandom.current().nextInt(ConfigHandler.Common.xpFromHarvestRangeAmount().getLeft(), ConfigHandler.Common.xpFromHarvestRangeAmount().getRight() + 1);
@@ -186,9 +194,29 @@ public class HarvestEventHandler {
                 ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), ConfigHandler.Common.xpFromHarvestAmount());
             }
 
-            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(cropBlockState));
-            level.setBlockAndUpdate(pos, cropBlockState);
-            level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
+            if (cropBlockState.hasProperty(DoublePlantBlock.HALF)) {
+                BlockPos blockPos = pos;
+
+                if (cropBlockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
+                    blockPos = pos.below();
+                }
+
+                BlockState doubleBlockHalf = level.getBlockState(pos);
+
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(doubleBlockHalf));
+                level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(entity, doubleBlockHalf));
+                level.destroyBlock(blockPos, true, entity);
+                level.setBlock(blockPos, doubleBlockHalf.getBlock().defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 0);
+            }
+            else {
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(cropBlockState));
+                level.setBlockAndUpdate(pos, cropBlockState);
+                level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
+            }
+
+            if (cropBlockState.hasProperty(top)) {
+                level.destroyBlock(pos, true, entity);
+            }
 
             if (heldStack != null && !level.isClientSide && ConfigHandler.Common.damageTool()) {
                 heldStack.hurtAndBreak(1, entity, (p) -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));

@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.DoublePlantBlock;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 import actuallyharvest.mixin.DiggerItemAccessor;
 import actuallyharvest.util.BlockHelper;
@@ -48,6 +50,7 @@ public class ConfigHandler {
 
     public static void init() {
         BooleanProperty upper = BooleanProperty.create("upper");
+        BooleanProperty top = BooleanProperty.create("top");
 
         Common.crops.clear();
         Common.rightClickBlocks.clear();
@@ -63,6 +66,14 @@ public class ConfigHandler {
                         if (cropBlockstate.hasProperty(upper)) {
                             cropBlockstate = cropBlockstate.setValue(upper, true);
                             maxAgeCropBlockstate = maxAgeCropBlockstate.setValue(upper, true);
+                        }
+                        else if (cropBlockstate.hasProperty(top)) {
+                            cropBlockstate = cropBlockstate.setValue(top, true);
+                            maxAgeCropBlockstate = maxAgeCropBlockstate.setValue(top, true);
+                        }
+                        else if (cropBlockstate.hasProperty(DoublePlantBlock.HALF)) {
+                            cropBlockstate = cropBlockstate.setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER);
+                            maxAgeCropBlockstate = maxAgeCropBlockstate.setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER);
                         }
 
                         if (BlockHelper.isBottomBlock(block)) continue;
