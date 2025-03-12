@@ -65,6 +65,9 @@ dependencies {
     //runtimeOnly "curse.maven:architectury-419699:${architectury_neoforge_version}"
     //runtimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
     //runtimeOnly "curse.maven:create-328085:${create_version}"
+    //runtimeOnly "curse.maven:moonlight-499980:${moonlight_neoforge_version}"
+    //runtimeOnly "curse.maven:supplementaries-412082:${supplementaries_neoforge_version}"
+    //runtimeOnly "curse.maven:ie-231951:${ie_neoforge_version}"
 }
 
 shadowJar {
