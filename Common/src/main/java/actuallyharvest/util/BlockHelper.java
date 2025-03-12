@@ -13,6 +13,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.ItemStack;
@@ -25,10 +26,12 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 import actuallyharvest.common.TagManager;
 import actuallyharvest.config.ConfigHandler;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+
+import actuallyharvest.platform.Services;
 
 public class BlockHelper {
 
@@ -141,6 +144,12 @@ public class BlockHelper {
         }
 
         return Pair.of(state, useDefault.get());
+    }
+
+    public static boolean playerCanHarvest(Player player) {
+        if (ConfigHandler.Common.allowFakePlayer()) return true;
+
+        return !Services.PLATFORM.isFakePlayer(player);
     }
 
     private static BlockState getAxeStrippingState(BlockState state) {
