@@ -32,6 +32,10 @@ There are possible conflicts with using other right click harvest features in ot
 	#Amount of XP dropped on harvest.
 	#Range: 0 ~ 10
 	xpFromHarvestAmount = 1
+	#Use range for XP drop, instead of set amount.
+	xpFromHarvestUseRange = false
+	#Range of XP dropped on harvest. Format: "min-max", example: "0-3"
+	xpFromHarvestRangeAmount = "0-3"
 	#Harvestable crops.
 	#Format: "harvestState[,afterHarvest]", i.e. "minecraft:wheat[age=7]" or "minecraft:cocoa[age=2,facing=north],minecraft:cocoa[age=0,facing=north]"
 	harvestableCrops = ["minecraft:wheat[age=7]", "minecraft:carrots[age=7]", "minecraft:potatoes[age=7]", "minecraft:beetroots[age=3]", "minecraft:nether_wart[age=3]", "minecraft:cocoa[age=2,facing=north],minecraft:cocoa[age=0,facing=north]", "minecraft:cocoa[age=2,facing=south],minecraft:cocoa[age=0,facing=south]", "minecraft:cocoa[age=2,facing=east],minecraft:cocoa[age=0,facing=east]", "minecraft:cocoa[age=2,facing=west],minecraft:cocoa[age=0,facing=west]"]
@@ -53,6 +57,14 @@ There are possible conflicts with using other right click harvest features in ot
 	maxHoeExpansionRange = 11
 	#List of individual hoe tools and their harvest tier. This is for modded items not covered. Format: minecraft:wooden_hoe-0 (with number being tier)
 	hoeItems = []
+	#List of crops to blacklist from right-click harvest. Format: "modid:block"
+	blacklistCrops = []
+	#List of mods to blacklist from right-click harvest. Format: "modid"
+	blacklistMods = []
+	#Allow machines, like Create's deployer, to harvest crops.
+	allowFakePlayer = true
+	#List of held items to blacklist from right-click harvest. Format: "modid:item"
+	blacklistHeldItems = []
 ```
 
 ## Links of Interest
