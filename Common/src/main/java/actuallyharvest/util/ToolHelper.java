@@ -1,6 +1,8 @@
 package actuallyharvest.util;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +45,10 @@ public class ToolHelper {
         }
 
         return 1;
+    }
+
+    public static ResourceLocation getItemStackId(ItemStack stack) {
+        return BuiltInRegistries.ITEM.getKey(stack.getItem());
     }
 
 }

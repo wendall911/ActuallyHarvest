@@ -16,6 +16,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.DoublePlantBlock;
@@ -178,6 +179,7 @@ public class ConfigHandler {
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> hoeItems;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistCrops;
         private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistMods;
+        private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistHeldItems;
         private final SpectreConfigSpec.BooleanValue allowFakePlayer;
 
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
@@ -215,6 +217,8 @@ public class ConfigHandler {
         private static final String[] defaultBlacklistCrops = new String[] {};
         private static final List<String> blacklistModsList = List.of("blacklistMods");
         private static final String[] defaultBlacklistMods = new String[] {};
+        private static final List<String> blacklistHeldItemsList = List.of("blacklistHeldItems");
+        private static final String[] defaultBlacklistHeldItems = new String[] {};
 
         public Common(SpectreConfigSpec.Builder builder) {
             builder.push("general");
@@ -278,6 +282,9 @@ public class ConfigHandler {
             allowFakePlayer = builder
                 .comment("Allow machines, like Create's deployer, to harvest crops.")
                 .define("allowFakePlayer", true);
+            blacklistHeldItems = builder
+                .comment("List of held items to blacklist from right-click harvest. Format: \"modid:item\"")
+                .defineListAllowEmpty(blacklistHeldItemsList, getBlacklistHeldItems(), resourceLocationValidator);
         }
 
         public static boolean allowEmptyHand() {
@@ -373,12 +380,20 @@ public class ConfigHandler {
             return () -> Arrays.asList(Common.defaultBlacklistMods);
         }
 
+        private static Supplier<List<? extends String>> getBlacklistHeldItems() {
+            return () -> Arrays.asList(Common.defaultBlacklistHeldItems);
+        }
+
         private static boolean isBlacklistCrop(Block block) {
             return COMMON.blacklistCrops.get().contains(BlockHelper.getBlockId(block).toString());
         }
 
         private static boolean isBlacklistMod(Block block) {
             return COMMON.blacklistMods.get().contains(BlockHelper.getBlockId(block).getNamespace());
+        }
+
+        public static boolean isBlacklistHeldItem(ItemStack stack) {
+            return COMMON.blacklistHeldItems.get().contains(ToolHelper.getItemStackId(stack).toString());
         }
 
     }
