@@ -166,4 +166,8 @@ public class BlockHelper {
         NONE, CLICK, HARVEST;
     }
 
+    public static boolean isBlockItem(ItemStack stack) {
+        return Block.byItem(stack.getItem()) instanceof Block;
+    }
+
 }

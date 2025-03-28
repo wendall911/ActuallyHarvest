@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -55,12 +57,12 @@ public class ToolHelper {
     public static int getToolTier(HolderSet<Block> blocks) {
         int tier = 0;
         Map<TagKey<Block>, Integer> tiers = Map.of(
-            BlockTags.INCORRECT_FOR_WOODEN_TOOL, 0,
-            BlockTags.INCORRECT_FOR_STONE_TOOL, 1,
-            BlockTags.INCORRECT_FOR_IRON_TOOL, 2,
-            BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 3,
-            BlockTags.INCORRECT_FOR_GOLD_TOOL, 4,
-            BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 5
+                BlockTags.INCORRECT_FOR_WOODEN_TOOL, 0,
+                BlockTags.INCORRECT_FOR_STONE_TOOL, 1,
+                BlockTags.INCORRECT_FOR_IRON_TOOL, 2,
+                BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 3,
+                BlockTags.INCORRECT_FOR_GOLD_TOOL, 4,
+                BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 5
         );
 
         try {
@@ -69,10 +71,14 @@ public class ToolHelper {
             if (key.isPresent()) {
                 tier = tiers.getOrDefault(key.get(), 0);
             }
+        } catch (Exception ignore) {
         }
-        catch(Exception ignore) {}
 
         return tier;
+    }
+
+    public static ResourceLocation getItemStackId(ItemStack stack) {
+        return BuiltInRegistries.ITEM.getKey(stack.getItem());
     }
 
 }
