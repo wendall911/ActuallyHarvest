@@ -108,7 +108,12 @@ public class HarvestEventHandler {
             }
         }
 
-        if (!harvested) return ClickResult.pass();
+        if (!harvested) {
+            return ClickResult.pass();
+        }
+        else if (BlockHelper.isBlockItem(heldStack)) {
+            return ClickResult.pass();
+        }
 
         return ClickResult.interrupt();
     }
@@ -161,6 +166,11 @@ public class HarvestEventHandler {
             }
             else {
                 heldStack = entity.getItemInHand(hand);
+
+                if (ConfigHandler.Common.isBlacklistHeldItem(heldStack)) {
+                    return false;
+                }
+
                 copy = entity.getItemInHand(hand).copy();
             }
 
@@ -218,7 +228,7 @@ public class HarvestEventHandler {
                 level.destroyBlock(pos, true, entity);
             }
 
-            if (heldStack != null && !level.isClientSide && ConfigHandler.Common.damageTool()) {
+            if (!level.isClientSide && heldStack != null && ConfigHandler.Common.damageTool() && ToolHelper.isHoe(heldStack)) {
                 heldStack.hurtAndBreak(1, entity, (p) -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
             }
         }
