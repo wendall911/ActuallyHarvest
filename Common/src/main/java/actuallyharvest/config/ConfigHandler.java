@@ -16,7 +16,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
@@ -122,8 +122,8 @@ public class ConfigHandler {
         }
 
         BuiltInRegistries.ITEM.forEach(item -> {
-            if (item instanceof DiggerItem digger) {
-                Tool tool = digger.components().get(DataComponents.TOOL);
+            if (item instanceof HoeItem hoe) {
+                Tool tool = hoe.components().get(DataComponents.TOOL);
                 TagKey<Block> tagKey = null;
                 HolderSet<Block> blocks = null;
 
@@ -141,7 +141,7 @@ public class ConfigHandler {
                 }
 
                 if (tagKey == BlockTags.MINEABLE_WITH_HOE) {
-                    Common.hoeTools.put(digger, ToolHelper.getBaseRange(ToolHelper.getToolTier(blocks)));
+                    Common.hoeTools.put(hoe, ToolHelper.getBaseRange(ToolHelper.getToolTier(blocks)));
                 }
             }
         });
