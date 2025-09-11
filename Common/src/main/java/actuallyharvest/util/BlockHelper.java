@@ -21,9 +21,10 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
+import technology.roughness.whitenoise.platform.Services;
+
 import actuallyharvest.common.TagManager;
 import actuallyharvest.config.ConfigHandler;
-import actuallyharvest.platform.Services;
 
 public class BlockHelper {
 

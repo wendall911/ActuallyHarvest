@@ -11,6 +11,7 @@ import actuallyharvest.event.ServerEventListener;
 @Mod(ActuallyHarvest.MODID)
 public class ActuallyHarvestNeoForge {
 
+    @SuppressWarnings("removal")
     public ActuallyHarvestNeoForge() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

@@ -1,12 +1,12 @@
 package actuallyharvest;
 
-import com.illusivesoulworks.spectrelib.config.SpectreLibInitializer;
-
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+
+import technology.roughness.whitenoise.config.WhiteNoiseInitializer;
 
 import actuallyharvest.config.ConfigHandler;
 
-public class FabricConfigInitializer implements SpectreLibInitializer {
+public class FabricConfigInitializer implements WhiteNoiseInitializer {
 
     @Override
     public void onInitializeConfig() {
@@ -18,4 +18,3 @@ public class FabricConfigInitializer implements SpectreLibInitializer {
     }
 
 }
-
