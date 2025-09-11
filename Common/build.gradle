@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'org.spongepowered.gradle.vanilla'
-    id 'maven-publish'
 }
 
 archivesBaseName = "${mod_id}-common"
@@ -14,33 +13,13 @@ minecraft {
 }
 
 dependencies {
-    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
-
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-common', version: "${spectrelib_version}+${minecraft_version}"
+    implementation group: 'technology.roughness.whitenoise', name: 'whitenoise-common', version: "${whitenoise_version}"
 }
 
 processResources {
     filesMatching("pack.mcmeta") {
         expand 'mod_name': project.mod_name
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-        }
-    }
-
-    repositories {
-        if (project.hasProperty('localmaven')) {
-            maven {
-                url "file://" + localmaven
-            }
-        }
     }
 }

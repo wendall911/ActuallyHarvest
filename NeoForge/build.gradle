@@ -1,18 +1,10 @@
 plugins {
     id 'idea'
-    id 'maven-publish'
     id 'net.minecraftforge.gradle'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.parchmentmc.librarian.forgegradle'
     id 'org.spongepowered.mixin'
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.71.8'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin'
     id 'me.modmuss50.mod-publish-plugin'
-}
-
-repositories {
-    maven {
-        name = "C4's Maven"
-        url = "https://maven.theillusivec4.top/"
-    }
 }
 
 archivesBaseName = "${mod_id}"
@@ -25,7 +17,7 @@ mixin {
 }
 
 minecraft {
-    mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
+    mappings channel: 'parchment', version: "${mappings_version}-${minecraft_version}"
 
     // Automatically enable forge AccessTransformers if the file exists
     // This location is hardcoded in Forge and can not be changed.
@@ -71,36 +63,35 @@ minecraft {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compileOnly project(":Common")
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    compileOnly project(":Common")
 
-    implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_version}+${minecraft_version}")
-    jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_version}+${minecraft_version}") {
-        jarJar.pin(it, "${spectrelib_version}+${minecraft_version}")
-        jarJar.ranged(it, "${spectrelib_range}")
+    implementation fg.deobf(group: 'technology.roughness.whitenoise', name: 'whitenoise-forge', version: "${whitenoise_version}")
+    jarJar fg.deobf(group: 'technology.roughness.whitenoise', name: 'whitenoise-forge', version: "${whitenoise_version}") {
+        jarJar.pin(it, "${whitenoise_version}")
+        jarJar.ranged(it, "${whitenoise_range}")
     }
 
     // Testing mods
-    runtimeOnly fg.deobf("curse.maven:configured-457570:5180902")
-    runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-    //runtimeOnly fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:mmlib-368098:5414924")
-    //runtimeOnly fg.deobf("curse.maven:corn_delight-577805:5361751")
-    //runtimeOnly fg.deobf("curse.maven:ephero_lib-885449:${ephero_lib_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:croptopia-415438:${croptopia_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:the_veggie_way-270684:${the_veggie_way_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:phc_crops-361385:${phc_crops_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:phc_trees-365460:${phc_trees_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:kiwi-303657:${kiwi_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:lychee-567403:${lychee_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:fruittrees-355467:${fruit_trees_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:architectury-419699:${architectury_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:ldflower-850779:${ld_flower_breeding_version}")
-    //runtimeOnly fg.deobf("curse.maven:create-328085:${create_version}")
-    //runtimeOnly fg.deobf("curse.maven:moonlight-499980:${moonlight_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:supplementaries-412082:${supplementaries_forge_version}")
-    //runtimeOnly fg.deobf("curse.maven:ie-231951:${ie_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:curios-309927:${curios_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:mysterious_mountain_lib-368098:${mysterious_mountain_lib_version}")
+    runtimeOnly fg.deobf("curse.maven:corn_delight-577805:${corn_delight_version}")
+    runtimeOnly fg.deobf("curse.maven:ephero_lib-885449:${ephero_lib_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:croptopia-415438:${croptopia_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:phc_crops-361385:${phc_crops_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:phc_trees-365460:${phc_trees_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:kiwi-303657:${kiwi_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:lychee-567403:${lychee_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:fruittrees-355467:${fruit_trees_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:architectury-419699:${architectury_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:ldflower-850779:${ld_flower_breeding_version}")
+    runtimeOnly fg.deobf("curse.maven:create-328085:${create_version}")
+    runtimeOnly fg.deobf("curse.maven:moonlight-499980:${moonlight_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:supplementaries-412082:${supplementaries_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:ie-231951:${ie_forge_version}")
+    runtimeOnly fg.deobf("curse.maven:ars_nouveau-401955:${ars_nouveau_version}")
 }
 
 compileJava {
@@ -117,7 +108,6 @@ def replaceProperties = [
     'version': version,
     'forge_mc_version_range': forge_mc_version_range,
     'forge_version_range': forge_version_range,
-    'loader_version_range': loader_version_range,
     'license': license,
     'mod_id': mod_id,
     'mod_author': mod_author,
@@ -154,28 +144,11 @@ jarJar {
     enable()
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
-}
-
 task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-    file = new File(project(":").projectDir.toString() + '/build/libs/changelog.txt');
-    templateContent = file(project(":").projectDir.toString() + '/files/templates/changelog.mustache').getText('UTF-8');
-    fromRepo = file("$projectDir");
-    toRef = "HEAD";
-    fromRef = "${minecraft_version}-${last_mod_version}";
+    file.set(new File(project(":").projectDir.toString() + '/build/libs/changelog.txt'));
+    templateContent.set(file(project(":").projectDir.toString() + '/files/templates/changelog.mustache').getText('UTF-8'));
+    toRevision.set('HEAD');
+    fromRevision.set("${minecraft_version}-${last_mod_version}");
 }
 
 def updates = tasks.register("generateUpdates", Copy) {
@@ -200,9 +173,12 @@ def publishFile = project(":").projectDir.toString() + "/NeoForge/build/libs/${a
 
 publishMods {
     file = file(publishFile)
-    changelog = file(changelogFile).text
+    if (file(changelogFile).exists()) {
+        changelog = file(changelogFile).text
+    }
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
     modLoaders.addAll(['neoforge', 'forge'])
+    dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
 
     if (project.hasProperty('ahcurseApiKey')) {
         curseforge {
@@ -212,14 +188,12 @@ publishMods {
             clientRequired = true
             serverRequired = true
             minecraftVersions.addAll("${release_versions}".split(','))
-            embeds('spectrelib')
             optional('catalogue')
-			optional('farmers-delight')
-			optional('the-veggie-way')
-			optional('pams-harvestcraft-2-crops')
-			optional('pams-harvestcraft-2-trees')
-			optional('fruit-trees')
-			optional('croptopia')
+            optional('farmers-delight')
+            optional('pams-harvestcraft-2-crops')
+            optional('pams-harvestcraft-2-trees')
+            optional('fruit-trees')
+            optional('croptopia')
         }
     }
     if (project.hasProperty('ahModrinthId')) {
@@ -230,7 +204,5 @@ publishMods {
             optional('farmers-delight')
             optional('fruitful-fun')
         }
-    }
-    if (project.hasProperty('ahGithubToken')) {
     }
 }
