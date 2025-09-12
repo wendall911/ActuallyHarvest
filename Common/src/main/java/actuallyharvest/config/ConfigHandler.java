@@ -24,8 +24,6 @@ import net.minecraft.world.level.block.DoublePlantBlock;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.illusivesoulworks.spectrelib.config.SpectreConfigSpec;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -38,17 +36,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
+import technology.roughness.whitenoise.config.WhiteNoiseConfigSpec;
+
 import actuallyharvest.util.BlockHelper;
 import actuallyharvest.util.ToolHelper;
 
 public class ConfigHandler {
 
-    public static final SpectreConfigSpec COMMON_SPEC;
+    public static final WhiteNoiseConfigSpec COMMON_SPEC;
 
     private static final Common COMMON;
 
     static {
-        final Pair<Common, SpectreConfigSpec> specPairCommon = new SpectreConfigSpec.Builder().configure(Common::new);
+        final Pair<Common, WhiteNoiseConfigSpec> specPairCommon = new WhiteNoiseConfigSpec.Builder().configure(Common::new);
 
         COMMON_SPEC = specPairCommon.getRight();
         COMMON = specPairCommon.getLeft();
@@ -159,25 +159,25 @@ public class ConfigHandler {
 
     public static class Common {
 
-        private final SpectreConfigSpec.BooleanValue allowEmptyHand;
-        private final SpectreConfigSpec.BooleanValue damageTool;
-        private final SpectreConfigSpec.BooleanValue autoConfigMods;
-        private final SpectreConfigSpec.IntValue xpFromHarvestChance;
-        private final SpectreConfigSpec.IntValue xpFromHarvestAmount;
-        private final SpectreConfigSpec.BooleanValue xpFromHarvestUseRange;
-        private final SpectreConfigSpec.ConfigValue<String> xpFromHarvestRangeAmount;
-        private final SpectreConfigSpec.ConfigValue<List<? extends String>> harvestableCrops;
-        private final SpectreConfigSpec.ConfigValue<List<? extends String>> harvestableBlocks;
-        private final SpectreConfigSpec.BooleanValue expandHoeRange;
-        private final SpectreConfigSpec.IntValue smallTierExpansionRange;
-        private final SpectreConfigSpec.IntValue highTierExpansionRange;
-        private final SpectreConfigSpec.BooleanValue expandHoeRangeEnchanted;
-        private final SpectreConfigSpec.IntValue maxHoeExpansionRange;
-        private final SpectreConfigSpec.ConfigValue<List<? extends String>> hoeItems;
-        private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistCrops;
-        private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistMods;
-        private final SpectreConfigSpec.ConfigValue<List<? extends String>> blacklistHeldItems;
-        private final SpectreConfigSpec.BooleanValue allowFakePlayer;
+        private final WhiteNoiseConfigSpec.BooleanValue allowEmptyHand;
+        private final WhiteNoiseConfigSpec.BooleanValue damageTool;
+        private final WhiteNoiseConfigSpec.BooleanValue autoConfigMods;
+        private final WhiteNoiseConfigSpec.IntValue xpFromHarvestChance;
+        private final WhiteNoiseConfigSpec.IntValue xpFromHarvestAmount;
+        private final WhiteNoiseConfigSpec.BooleanValue xpFromHarvestUseRange;
+        private final WhiteNoiseConfigSpec.ConfigValue<String> xpFromHarvestRangeAmount;
+        private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> harvestableCrops;
+        private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> harvestableBlocks;
+        private final WhiteNoiseConfigSpec.BooleanValue expandHoeRange;
+        private final WhiteNoiseConfigSpec.IntValue smallTierExpansionRange;
+        private final WhiteNoiseConfigSpec.IntValue highTierExpansionRange;
+        private final WhiteNoiseConfigSpec.BooleanValue expandHoeRangeEnchanted;
+        private final WhiteNoiseConfigSpec.IntValue maxHoeExpansionRange;
+        private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> hoeItems;
+        private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> blacklistCrops;
+        private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> blacklistMods;
+        private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> blacklistHeldItems;
+        private final WhiteNoiseConfigSpec.BooleanValue allowFakePlayer;
 
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
         private static final Set<Block> rightClickBlocks = Sets.newHashSet();
@@ -217,7 +217,7 @@ public class ConfigHandler {
         private static final List<String> blacklistHeldItemsList = List.of("blacklistHeldItems");
         private static final String[] defaultBlacklistHeldItems = new String[] {};
 
-        public Common(SpectreConfigSpec.Builder builder) {
+        public Common(WhiteNoiseConfigSpec.Builder builder) {
             builder.push("general");
             allowEmptyHand = builder
                 .comment("Allow harvesting with empty hand. If disabled, requires hoe.")

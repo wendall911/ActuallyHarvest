@@ -28,10 +28,10 @@ import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
+import technology.roughness.whitenoise.platform.Services;
+
 import actuallyharvest.common.TagManager;
 import actuallyharvest.config.ConfigHandler;
-
-import actuallyharvest.platform.Services;
 
 public class BlockHelper {
 
