@@ -17,8 +17,8 @@ neoForge {
         accessTransformers.from(at.absolutePath)
     }
     parchment {
-        minecraftVersion = parchment_mc_version
-        mappingsVersion = parchment_version
+        minecraftVersion = minecraft_version
+        mappingsVersion = mappings_version
     }
     runs {
         configureEach {
@@ -40,8 +40,8 @@ neoForge {
 }
 
 dependencies {
-    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
-    jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
+    implementation group: 'technology.roughness.whitenoise', name: 'whitenoise-neoforge', version: "${whitenoise_version}"
+    jarJar group: 'technology.roughness.whitenoise', name: 'whitenoise-neoforge', version: "${whitenoise_version}"
 
     // Testing mods
     //runtimeOnly "curse.maven:configured-457570:5441232"
@@ -77,11 +77,10 @@ shadowJar {
 tasks.register('idePostSync') {}
 
 task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-    file = new File(project(":").projectDir.toString() + '/build/libs/changelog.txt');
-    templateContent = file(project(":").projectDir.toString() + '/files/templates/changelog.mustache').getText('UTF-8');
-    fromRepo = file("$projectDir");
-    toRef = "HEAD";
-    fromRef = "${minecraft_version}-${last_mod_version}";
+    file.set(new File(project(":").projectDir.toString() + '/build/libs/changelog.txt'));
+    templateContent.set(file(project(":").projectDir.toString() + '/files/templates/changelog.mustache').getText('UTF-8'));
+    toRevision.set('HEAD');
+    fromRevision.set("${minecraft_version}-${last_mod_version}");
 }
 
 def updates = tasks.register("generateUpdates", Copy) {
@@ -109,6 +108,7 @@ publishMods {
     changelog = file(changelogFile).text
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
     modLoaders.add('neoforge')
+    dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
 
     if (project.hasProperty('ahcurseApiKey')) {
         curseforge {
