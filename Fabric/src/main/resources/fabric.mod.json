@@ -19,7 +19,7 @@
     "main": [
       "actuallyharvest.ActuallyHarvestFabric"
     ],
-    "spectrelib-config": [
+    "whitenoise-config": [
       "actuallyharvest.FabricConfigInitializer"
     ]
   },
