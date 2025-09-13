@@ -72,7 +72,6 @@ publishMods {
             clientRequired = true
             serverRequired = true
             minecraftVersions.addAll("${release_versions}".split(','))
-            embeds('spectrelib')
             optional('farmers-delight-refabricated')
             optional('croptopia')
             optional('fruit-trees')
