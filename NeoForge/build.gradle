@@ -30,6 +30,7 @@ neoForge {
         }
         server {
             server()
+            programArgument '--nogui'
         }
     }
     mods {
@@ -105,7 +106,9 @@ def publishFile = project(":").projectDir.toString() + "/NeoForge/build/libs/${a
 
 publishMods {
     file = file(publishFile)
-    changelog = file(changelogFile).text
+    if (file(changelogFile).exists()) {
+        changelog = file(changelogFile).text
+    }
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
     modLoaders.add('neoforge')
     dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
@@ -121,11 +124,11 @@ publishMods {
             embeds('spectrelib')
             optional('configured')
             optional('catalogue')
-			optional('farmers-delight')
-			optional('pams-harvestcraft-2-crops')
-			optional('pams-harvestcraft-2-trees')
-			optional('fruit-trees')
-			optional('croptopia')
+            optional('farmers-delight')
+            optional('pams-harvestcraft-2-crops')
+            optional('pams-harvestcraft-2-trees')
+            optional('fruit-trees')
+            optional('croptopia')
         }
     }
     if (project.hasProperty('ahModrinthId')) {
@@ -136,7 +139,5 @@ publishMods {
             optional('farmers-delight')
             optional('fruitful-fun')
         }
-    }
-    if (project.hasProperty('ahGithubToken')) {
     }
 }

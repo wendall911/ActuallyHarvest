@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-	id 'me.modmuss50.mod-publish-plugin'
+    id 'me.modmuss50.mod-publish-plugin'
 }
 
 base {
@@ -26,7 +26,7 @@ repositories {
         }
         filter { includeGroupAndSubgroups('org.spongepowered') }
     }
-   
+
     exclusiveContent {
         forRepositories(
             maven {
@@ -41,7 +41,7 @@ repositories {
         filter { includeGroup('org.parchmentmc.data') }
     }
 
-	maven {
+    maven {
         name = 'BlameJared Maven (CrT / Bookshelf / JEI (Newer) / vazkii / xyz)'
         url = 'https://maven.blamejared.com'
     }
@@ -73,12 +73,11 @@ repositories {
         url = 'https://raw.githubusercontent.com/wendall911/maven/main/'
     }
 
-	if (System.getenv('local_maven') != null && project.hasProperty('localmaven')) {
+    if (System.getenv('local_maven') != null && project.hasProperty('localmaven')) {
         maven {
             url 'file://' + localmaven
         }
-	}
-
+    }
 }
 
 // Declare capabilities on the outgoing configurations.

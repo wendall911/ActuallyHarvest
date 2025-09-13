@@ -57,7 +57,9 @@ def publishFile = project(":").projectDir.toString() + "/Fabric/build/libs/${arc
 
 publishMods {
     file = file(publishFile)
-    changelog = file(changelogFile).text
+    if (file(changelogFile).exists()) {
+        changelog = file(changelogFile).text
+    }
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
     modLoaders.add('fabric')
     dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
@@ -71,9 +73,9 @@ publishMods {
             serverRequired = true
             minecraftVersions.addAll("${release_versions}".split(','))
             embeds('spectrelib')
-			optional('farmers-delight-refabricated')
-			optional('croptopia')
-			optional('fruit-trees')
+            optional('farmers-delight-refabricated')
+            optional('croptopia')
+            optional('fruit-trees')
         }
     }
     if (project.hasProperty('ahModrinthId')) {
@@ -84,7 +86,5 @@ publishMods {
             optional('farmers-delight-refabricated')
             optional('fruitful-fun')
         }
-    }
-    if (project.hasProperty('ahGithubToken')) {
     }
 }
