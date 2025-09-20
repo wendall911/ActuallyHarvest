@@ -106,7 +106,7 @@ tasks.withType(JavaCompile) {
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
 def replaceProperties = [
-    'version': version,
+    'version': actualVersion,
     'forge_mc_version_range': forge_mc_version_range,
     'forge_version_range': forge_version_range,
     'license': license,
