@@ -37,7 +37,7 @@ dependencies {
     modRuntimeOnly "curse.maven:architectury-419699:${architectury_fabric_version}"
     modRuntimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
     runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_fabric_version}"
-    runtimeOnly "curse.maven:croptopia-415438:${croptopia_fabric_version}"
+    //runtimeOnly "curse.maven:croptopia-415438:${croptopia_fabric_version}"
 }
 
 loom {
@@ -71,6 +71,18 @@ def replaceProperties = [
     'issue_tracker': issue_tracker, 'fabric_loader_min_version': fabric_loader_min_version,
     'mod_credits': mod_credits, 'java_version': java_version
 ]
+
+processResources {
+    from project(":Common").sourceSets.main.resources
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+    exclude '.cache'
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
+}
 
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
