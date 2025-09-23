@@ -56,7 +56,6 @@ dependencies {
     //runtimeOnly "curse.maven:extra_delight-842106:5659546"
     //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_neoforge_version}"
     //runtimeOnly "curse.maven:croptopia-415438:${croptopia_neoforge_version}"
-    //runtimeOnly "curse.maven:the_veggie_way-270684:${the_veggie_way_neoforge_version}"
     //runtimeOnly "curse.maven:phc_crops-361385:${phc_crops_neoforge_version}"
     //runtimeOnly "curse.maven:phc_trees-365460:${phc_trees_neoforge_version}"
     //runtimeOnly "curse.maven:kiwi-303657:${kiwi_neoforge_version}"
@@ -73,6 +72,8 @@ dependencies {
     //runtimeOnly "curse.maven:moonlight-499980:${moonlight_neoforge_version}"
     //runtimeOnly "curse.maven:supplementaries-412082:${supplementaries_neoforge_version}"
     //runtimeOnly "curse.maven:ie-231951:${ie_neoforge_version}"
+    //runtimeOnly "curse.maven:ars_nouveau-401955:${ars_nouveau_version}"
+    //runtimeOnly "curse.maven:curios-309927:${curios_neoforge_version}"
 }
 
 shadowJar {
