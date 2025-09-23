@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -20,8 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.DoublePlantBlock;
-
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,7 +65,7 @@ public class ConfigHandler {
 
         if (Common.autoConfigMods()) {
             for (Block block : BuiltInRegistries.BLOCK) {
-                if (!BlockHelper.isVanilla(block) && !Common.isBlacklistMod(block) && !Common.isBlacklistCrop(block)) {
+                if (!Common.isBlacklistMod(block) && !Common.isBlacklistCrop(block)) {
                     if (block instanceof CropBlock cropBlock) {
                         BlockState cropBlockstate = cropBlock.defaultBlockState();
                         BlockState maxAgeCropBlockstate = cropBlock.getStateForAge(cropBlock.getMaxAge());
@@ -84,7 +86,16 @@ public class ConfigHandler {
                         if (BlockHelper.isBottomBlock(block)) continue;
 
                         Common.crops.put(maxAgeCropBlockstate, cropBlockstate);
-                    } else if ((block instanceof BushBlock || block instanceof GrowingPlantBlock)
+                    }
+                    else if (block instanceof CocoaBlock cocoaBlock) {
+                        // Iterate over directions and configre all possible block states.
+                        BlockStateProperties.HORIZONTAL_FACING.getAllValues().forEach(direction -> {
+                            BlockState zeroState = cocoaBlock.defaultBlockState().setValue(CocoaBlock.AGE, 0).setValue(CocoaBlock.FACING, direction.value());
+                            BlockState maxAgeState = cocoaBlock.defaultBlockState().setValue(CocoaBlock.AGE, CocoaBlock.MAX_AGE).setValue(CocoaBlock.FACING, direction.value());
+                            Common.crops.put(maxAgeState, zeroState);
+                        });
+                    }
+                    else if ((block instanceof BushBlock || block instanceof GrowingPlantBlock)
                             && block instanceof BonemealableBlock) {
                         Common.rightClickBlocks.add(block);
                     }
@@ -185,17 +196,7 @@ public class ConfigHandler {
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
         private static final Set<Block> rightClickBlocks = Sets.newHashSet();
         private static final List<String> harvestableCropsList = List.of("harvestableCrops");
-        private static final String[] defaultHarvestableCrops = new String[] {
-            "minecraft:wheat[age=7]",
-            "minecraft:carrots[age=7]",
-            "minecraft:potatoes[age=7]",
-            "minecraft:beetroots[age=3]",
-            "minecraft:nether_wart[age=3]",
-            "minecraft:cocoa[age=2,facing=north],minecraft:cocoa[age=0,facing=north]",
-            "minecraft:cocoa[age=2,facing=south],minecraft:cocoa[age=0,facing=south]",
-            "minecraft:cocoa[age=2,facing=east],minecraft:cocoa[age=0,facing=east]",
-            "minecraft:cocoa[age=2,facing=west],minecraft:cocoa[age=0,facing=west]"
-        };
+        private static final String[] defaultHarvestableCrops = new String[] {};
         private static final List<String> harvestableBlocksList = List.of("harvestableBlocks");
         private static final String[] defaultHarvestableBlocks = new String[] {
             "minecraft:sweet_berry_bush",
@@ -229,7 +230,7 @@ public class ConfigHandler {
                 .comment("Harvesting crops costs durability.")
                 .define("damageTool", false);
             autoConfigMods = builder
-                .comment("Attempt to automatically register crops from non-vanilla mods.")
+                .comment("Automatically register crops.")
                 .define("autoConfigMods", true);
             xpFromHarvestChance = builder
                 .comment("Chance of XP dropping on harvest.")
@@ -245,14 +246,17 @@ public class ConfigHandler {
                 .define("xpFromHarvestRangeAmount", "0-3", xpRangeValidator);
             harvestableCrops = builder
                 .comment(
-                    "Harvestable crops.\n"
-                    + "Format: \"harvestState[,afterHarvest]\", i.e. \"minecraft:wheat[age=7]\" or \"minecraft:cocoa[age=2,facing=north],minecraft:cocoa[age=0,facing=north]\""
+                    "Harvestable crops.",
+                    "Format: \"harvestState[,afterHarvest]\", i.e. \"minecraft:wheat[age=7]\"",
+                    "or \"minecraft:cocoa[age=2,facing=north],minecraft:cocoa[age=0,facing=north]\"",
+                    "WARNING: If autoConfigMods is set to false, only crops defined here will work.",
+                    "If not, it will just add to the auto-configured list."
                 )
                 .defineListAllowEmpty(harvestableCropsList, getCropsList(), s -> (s instanceof String));
             harvestableBlocks = builder
                 .comment(
-                    "Blocks that right clicking should simulate click instead of breaking.\n"
-                    + "For blocks like berry bushes that have built-in right click harvest."
+                    "Blocks that right clicking should simulate click instead of breaking.",
+                    "For blocks like berry bushes that have built-in right click harvest."
                 )
                 .defineListAllowEmpty(harvestableBlocksList, getHarvestableBlocksList(), resourceLocationValidator);
             expandHoeRange = builder
@@ -268,10 +272,16 @@ public class ConfigHandler {
                 .comment("Expand hoe range by 1 for each level of efficiency enchantment level.")
                 .define("expandHoeRangeEnchanted", true);
             maxHoeExpansionRange = builder
-                .comment("Maximum range hoe can expand for harvesting. This is the maximum of tier + efficiency enchantment.")
+                .comment(
+                    "Maximum range hoe can expand for harvesting.",
+                    "This is the maximum of tier + efficiency enchantment."
+                )
                 .defineInRange("maxHoeExpansionRange", 11, 1, 11);
             hoeItems = builder
-                .comment("List of individual hoe tools and their harvest tier. This is for modded items not covered. Format: minecraft:wooden_hoe-0 (with number being tier)")
+                .comment(
+                    "List of individual hoe tools and their harvest tier. This is for modded items not covered.",
+                    "Format: minecraft:wooden_hoe-0 (with number being tier)"
+                )
                 .defineListAllowEmpty(hoeItemList, getHoeItems(), hoeItemValidator);
             blacklistCrops = builder
                 .comment("List of crops to blacklist from right-click harvest. Format: \"modid:block\"")
