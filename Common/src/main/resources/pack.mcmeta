@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "Actually Harvest resources",
-    "pack_format": 15
+    "description": "${mod_display_name} resources",
+    "pack_format": ${pack_format}
   }
 }
