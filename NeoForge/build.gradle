@@ -1,12 +1,8 @@
-import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
-
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
     id 'io.github.goooler.shadow'
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin'
 }
-
 
 def modLoader = "${project.name}".toUpperCase()
 def actualVersion = version
@@ -48,10 +44,11 @@ dependencies {
     implementation group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-neoforge", version: "${whitenoise_version}"
     jarJar group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-neoforge", version: "${whitenoise_version}"
 
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
     // Testing mods
     //runtimeOnly "curse.maven:configured-457570:5441232"
     //runtimeOnly "curse.maven:catalogue-459701:5631367"
-    //runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_neoforge_version}"
     //runtimeOnly "curse.maven:extra_delight-842106:5659546"
     //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_neoforge_version}"
@@ -80,30 +77,6 @@ shadowJar {
     archiveClassifier = ''
 }
 
-tasks.register('changelog', GitChangelogTask) {
-    file.set(new File(project(":").projectDir.toString() + '/build/libs/changelog.txt'));
-    templateContent.set(file(project(":").projectDir.toString() + '/files/templates/changelog.mustache').getText('UTF-8'));
-    toRevision.set('HEAD');
-    fromRevision.set("${minecraft_version}-${last_mod_version}");
-}
-
-def updates = tasks.register("generateUpdates", Copy) {
-    it.outputs.upToDateWhen {
-        false
-    }
-
-    it.from("../files/templates/") {
-        include 'updates.json'
-        expand 'version': actualVersion, 'minecraft_version': minecraft_version
-    }
-
-    it.into '../files/'
-}
-
-tasks.generateUpdates.mustRunAfter('jar', 'sourcesJar')
-
-tasks.build.dependsOn('changelog', 'generateUpdates')
-
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
 def publishFile = project(":").projectDir.toString() + "/NeoForge/build/libs/${archivesBaseName}-${version}.jar"
 def display_name = "${project.name} ${minecraft_version}-${version}"
@@ -120,14 +93,24 @@ publishMods {
     modLoaders.add('neoforge')
     dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
 
-    if (project.hasProperty('ahcurseApiKey')) {
+    if (project.hasProperty("${curseforge_api_key_prop}")) {
         curseforge {
-            accessToken = project.ahcurseApiKey
-            projectId = project.ahcurseId
+            accessToken = project.property("${curseforge_api_key_prop}")
+            projectId = "${curseforge_id}"
+            projectSlug = "${curseforge_slug}"
             javaVersions.add(JavaVersion.toVersion("${java_version}"))
             clientRequired = true
             serverRequired = true
             minecraftVersions.addAll("${release_versions}".split(','))
+            optional('betterdays')
+            optional('charged-charms')
+            optional('creeper-fireworks')
+            optional('homeostatic')
+            optional('magical-psi-revival')
+            optional('simpletextoverlay')
+            optional('ready-player-fun')
+            optional('survivalist-essentials')
+            optional('tinkersurvival')
             optional('configured')
             optional('catalogue')
             optional('farmers-delight')
@@ -137,13 +120,32 @@ publishMods {
             optional('croptopia')
         }
     }
-    if (project.hasProperty('ahModrinthId')) {
+    if (project.hasProperty("${modrinth_api_key_prop}")) {
         modrinth {
-            accessToken = project.modrinthKey
-            projectId = project.ahModrinthId
+            accessToken = project.property("${modrinth_api_key_prop}")
+            projectId = "${modrinth_id}"
             minecraftVersions.addAll("${release_versions}".split(','))
+            optional('betterdays')
+            optional('charged-charms')
+            optional('creeper-fireworks-mod')
+            optional('homeostatic')
+            optional('magical-psi-revival')
+            optional('simpletextoverlay')
+            optional('ready-player-fun')
+            optional('survivalist-essentials')
+            optional('tinkersurvival')
             optional('farmers-delight')
             optional('fruitful-fun')
+        }
+    }
+    if (project.hasProperty("${discord_webhook_prop}")) {
+        discord {
+            webhookUrl = project.property("${discord_webhook_prop}")
+            dryRunWebhookUrl = project.property("${discord_dryrun_webhook_prop}")
+            username = "${mod_author}"
+            content = changelog.map {
+                "# A new version of ${mod_display_name} for NeoForge ${minecraft_version} has been released! \n" + it
+            }
         }
     }
 }
