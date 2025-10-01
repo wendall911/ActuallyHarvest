@@ -15,7 +15,7 @@ public class ActuallyHarvestNeoForge {
         ActuallyHarvest.init();
     }
 
-    private void setup(final FMLCommonSetupEvent evt) {
+    private void setup(final FMLCommonSetupEvent event) {
         NeoForge.EVENT_BUS.register(ServerEventListener.class);
     }
 
