@@ -17,7 +17,7 @@ neoForge {
         accessTransformers.from(at.absolutePath)
     }
     parchment {
-        minecraftVersion = minecraft_version
+        minecraftVersion = mappings_minecraft_version
         mappingsVersion = mappings_version
     }
     runs {
@@ -69,6 +69,10 @@ dependencies {
     //runtimeOnly "curse.maven:moonlight-499980:${moonlight_neoforge_version}"
     //runtimeOnly "curse.maven:supplementaries-412082:${supplementaries_neoforge_version}"
     //runtimeOnly "curse.maven:ie-231951:${ie_neoforge_version}"
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
 }
 
 shadowJar {

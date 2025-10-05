@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 import technology.roughness.whitenoise.config.WhiteNoiseConfigSpec;
 
+import actuallyharvest.common.Translations;
 import actuallyharvest.util.BlockHelper;
 import actuallyharvest.util.ToolHelper;
 
@@ -221,76 +222,61 @@ public class ConfigHandler {
         public Common(WhiteNoiseConfigSpec.Builder builder) {
             builder.push("general");
             allowEmptyHand = builder
-                .comment("Allow harvesting with empty hand. If disabled, requires hoe.")
+                .comment(getTranslation("allowemptyhand"))
                 .define("allowEmptyHand", true);
             damageTool = builder
-                .comment("Harvesting crops costs durability.")
+                .comment(getTranslation("damagetool"))
                 .define("damageTool", false);
             autoConfigMods = builder
-                .comment("Automatically register crops.")
+                .comment(getTranslation("autoconfigmods"))
                 .define("autoConfigMods", true);
             xpFromHarvestChance = builder
-                .comment("Chance of XP dropping on harvest.")
+                .comment(getTranslation("xpfromharvestchance"))
                 .defineInRange("xpFromHarvestChance", 100, 0, 100);
             xpFromHarvestAmount = builder
-                .comment("Amount of XP dropped on harvest.")
+                .comment(getTranslation("xpfromharvestamount"))
                 .defineInRange("xpFromHarvestAmount", 1, 0, 10);
             xpFromHarvestUseRange = builder
-                .comment("Use range for XP drop, instead of set amount.")
+                .comment(getTranslation("xpfromharvestuserange"))
                 .define("xpFromHarvestUseRange", false);
             xpFromHarvestRangeAmount = builder
-                .comment("Range of XP dropped on harvest. Format: \"min-max\", example: \"0-3\"")
+                .comment(getTranslation("xpfromharvestrangeamount"))
                 .define("xpFromHarvestRangeAmount", "0-3", xpRangeValidator);
             harvestableCrops = builder
-                .comment(
-                    "Harvestable crops.",
-                    "Format: \"harvestState[,afterHarvest]\", i.e. \"minecraft:wheat[age=7]\"",
-                    "or \"minecraft:cocoa[age=2,facing=north],minecraft:cocoa[age=0,facing=north]\"",
-                    "WARNING: If autoConfigMods is set to false, only crops defined here will work.",
-                    "If not, it will just add to the auto-configured list."
-                )
+                .comment(getTranslation("harvestablecrops"))
                 .defineListAllowEmpty(harvestableCropsList, getCropsList(), s -> (s instanceof String));
             harvestableBlocks = builder
-                .comment(
-                    "Blocks that right clicking should simulate click instead of breaking.",
-                    "For blocks like berry bushes that have built-in right click harvest."
-                )
+                .comment(getTranslation("harvestableblocks"))
                 .defineListAllowEmpty(harvestableBlocksList, getHarvestableBlocksList(), resourceLocationValidator);
             expandHoeRange = builder
-                .comment("Expand hoe range based on tier.")
+                .comment(getTranslation("expandhoerange"))
                 .define("expandHoeRange", true);
             smallTierExpansionRange = builder
-                .comment("Regular hoe (gold, wood, iron) expansion range.")
+                .comment(getTranslation("smalltierexpansionrange"))
                 .defineInRange("smallTierExpansionRange", 2, 1, 5);
             highTierExpansionRange = builder
-                .comment("Regular hoe (gold, wood, iron) expansion range.")
+                .comment(getTranslation("hightierexpansionrange"))
                 .defineInRange("highTierExpansionRange", 3, 1, 5);
             expandHoeRangeEnchanted = builder
-                .comment("Expand hoe range by 1 for each level of efficiency enchantment level.")
+                .comment(getTranslation("expandhoerangeenchanted"))
                 .define("expandHoeRangeEnchanted", true);
             maxHoeExpansionRange = builder
-                .comment(
-                    "Maximum range hoe can expand for harvesting.",
-                    "This is the maximum of tier + efficiency enchantment."
-                )
+                .comment(getTranslation("maxhoeexpansionrange"))
                 .defineInRange("maxHoeExpansionRange", 11, 1, 11);
             hoeItems = builder
-                .comment(
-                    "List of individual hoe tools and their harvest tier. This is for modded items not covered.",
-                    "Format: minecraft:wooden_hoe-0 (with number being tier)"
-                )
+                .comment(getTranslation("hoeitems"))
                 .defineListAllowEmpty(hoeItemList, getHoeItems(), hoeItemValidator);
             blacklistCrops = builder
-                .comment("List of crops to blacklist from right-click harvest. Format: \"modid:block\"")
+                .comment(getTranslation("blacklistcrops"))
                 .defineListAllowEmpty(blacklistCropsList, getBlacklistCrops(), resourceLocationValidator);
             blacklistMods = builder
-                .comment("List of mods to blacklist from right-click harvest. Format: \"modid\"")
+                .comment(getTranslation("blacklistmods"))
                 .defineListAllowEmpty(blacklistModsList, getBlacklistMods(), modidValidator);
             allowFakePlayer = builder
-                .comment("Allow machines, like Create's deployer, to harvest crops.")
+                .comment(getTranslation("allowfakeplayer"))
                 .define("allowFakePlayer", true);
             blacklistHeldItems = builder
-                .comment("List of held items to blacklist from right-click harvest. Format: \"modid:item\"")
+                .comment(getTranslation("blacklisthelditems"))
                 .defineListAllowEmpty(blacklistHeldItemsList, getBlacklistHeldItems(), resourceLocationValidator);
         }
 
@@ -403,6 +389,10 @@ public class ConfigHandler {
             return COMMON.blacklistHeldItems.get().contains(ToolHelper.getItemStackId(stack).toString());
         }
 
+    }
+
+    private static String getTranslation(String key) {
+        return Translations.get(key);
     }
 
 }
