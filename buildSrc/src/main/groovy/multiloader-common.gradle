@@ -137,8 +137,7 @@ ext.expandProps = [
     'neoforge_loader_version_range': neoforge_loader_version_range,
     'neoforge_mc_version_range': neoforge_mc_version_range,
     'mod_credits': mod_credits,
-    'curseforge_slug': curseforge_slug,
-    'pack_format': pack_format
+    'curseforge_slug': curseforge_slug
 ]
 
 processResources {
