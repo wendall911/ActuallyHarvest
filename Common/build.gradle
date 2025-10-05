@@ -17,7 +17,7 @@ neoForge {
         accessTransformers.from(at.absolutePath)
     }
     parchment {
-        minecraftVersion = mappings_minecraft_version
+        minecraftVersion = minecraft_version
         mappingsVersion = mappings_version
     }
 }
@@ -28,6 +28,10 @@ dependencies {
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: "${mixin_extras_version}"
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: "${mixin_extras_version}"
     implementation group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-common", version: "${whitenoise_version}"
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
 }
 
 configurations {
