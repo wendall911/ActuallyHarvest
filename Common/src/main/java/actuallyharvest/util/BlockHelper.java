@@ -89,7 +89,7 @@ public class BlockHelper {
             case "hoe_till" -> {
                 Block block = state.getBlock();
                 if (block == Blocks.ROOTED_DIRT) {
-                    if (!simulate && !context.getLevel().isClientSide) {
+                    if (!simulate && !context.getLevel().isClientSide()) {
                         Block.popResourceFromFace(context.getLevel(), context.getClickedPos(), context.getClickedFace(), new ItemStack(Items.HANGING_ROOTS));
                     }
                     yield Blocks.DIRT.defaultBlockState();

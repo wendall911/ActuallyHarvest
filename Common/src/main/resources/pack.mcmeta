@@ -1,6 +1,7 @@
 {
   "pack": {
     "description": "${mod_display_name} resources",
-    "pack_format": ${pack_format}
+    "min_format": ${pack_format},
+    "max_format": ${pack_format}
   }
 }

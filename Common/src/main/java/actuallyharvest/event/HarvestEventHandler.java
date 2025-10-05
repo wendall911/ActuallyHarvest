@@ -231,7 +231,7 @@ public class HarvestEventHandler {
                 level.destroyBlock(pos, true, entity);
             }
 
-            if (!level.isClientSide && heldStack != null && ConfigHandler.Common.damageTool() && ToolHelper.isHoe(heldStack)) {
+            if (!level.isClientSide() && heldStack != null && ConfigHandler.Common.damageTool() && ToolHelper.isHoe(heldStack)) {
                 heldStack.hurtAndBreak(1, entity, EquipmentSlot.MAINHAND);
             }
         }
