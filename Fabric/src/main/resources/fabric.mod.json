@@ -23,6 +23,9 @@
     "main": [
       "${mod_id}.${mod_name}Fabric"
     ],
+    "fabric-datagen": [
+      "${mod_id}.data.FabricDatagenInitializer"
+    ],
     "whitenoise-config": [
       "${mod_id}.FabricConfigInitializer"
     ]

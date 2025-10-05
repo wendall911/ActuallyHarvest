@@ -10,7 +10,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings(loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${mappings_version}@zip")
+        parchment("org.parchmentmc.data:parchment-${mappings_minecraft_version}:${mappings_version}@zip")
     })
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
@@ -23,7 +23,8 @@ dependencies {
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    // TODO Re-enable when REI is updated
+    //modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
 
     modLocalRuntime group: 'com.terraformersmc', name: 'modmenu', version: "${mod_menu_version}"
 
@@ -55,6 +56,28 @@ loom {
             ideConfigGenerated(true)
             runDir("run")
         }
+        commonDatagen {
+            client()
+            vmArg "-D${mod_id}.common_datagen=1"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.modid=${mod_id}"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("../Common/src/generated/resources")}"
+        }
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+processResources {
+    /*
+     * This is for things that have dedicated NeoForge datagen like
+     * Patchouli that need data copied over.
+    */
+    from ('../NeoForge/src/generated/resources/') {
+        exclude '**/recipe/*'
+        exclude '**/recipes/*'
     }
 }
 
