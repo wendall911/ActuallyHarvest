@@ -72,6 +72,10 @@ dependencies {
     //runtimeOnly "curse.maven:moonlight-499980:${moonlight_neoforge_version}"
     //runtimeOnly "curse.maven:supplementaries-412082:${supplementaries_neoforge_version}"
     //runtimeOnly "curse.maven:ie-231951:${ie_neoforge_version}"
+    //runtimeOnly "curse.maven:letsdo_brewery-1038106:${letsdo_brewery_neoforge_version}"
+    //runtimeOnly "curse.maven:letsdo_herbal-951221:${letsdo_herbal_neoforge_version}"
+    //runtimeOnly "curse.maven:letsdo_farm-1038103:${letsdo_farm_neoforge_version}"
+    //runtimeOnly "curse.maven:letsdo_vinery-704465:${letsdo_vinery_neoforge_version}"
 }
 
 sourceSets.main.resources {
@@ -123,6 +127,10 @@ publishMods {
             optional('pams-harvestcraft-2-trees')
             optional('fruit-trees')
             optional('croptopia')
+            optional('lets-do-brewery-farm-charm-compat')
+            optional('lets-do-herbal-brews')
+            optional('lets-do-farm-charm')
+            optional('lets-do-vinery')
         }
     }
     if (project.hasProperty("${modrinth_api_key_prop}")) {
@@ -141,6 +149,10 @@ publishMods {
             optional('tinkersurvival')
             optional('farmers-delight')
             optional('fruitful-fun')
+            optional('lets-do-brewery-farmcharm-compat')
+            optional('lets-do-herbalbrews')
+            optional('lets-do-farm-charm')
+            optional('lets-do-vinery')
         }
     }
     if (project.hasProperty("${discord_webhook_prop}")) {
