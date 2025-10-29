@@ -29,6 +29,8 @@
   "actuallyharvest.configuration.hoeitems.name": "Hoe Items",
   "actuallyharvest.configuration.maxhoeexpansionrange.description": "Maximum range hoe can expand for harvesting.\nThis is the maximum of tier + efficiency enchantment.",
   "actuallyharvest.configuration.maxhoeexpansionrange.name": "Max Hoe Expansion Range",
+  "actuallyharvest.configuration.replantcrops.description": "Automatically replant crops after harvesting.",
+  "actuallyharvest.configuration.replantcrops.name": "Replant Crops",
   "actuallyharvest.configuration.smalltierexpansionrange.description": "Regular hoe (gold, wood, iron) expansion range.",
   "actuallyharvest.configuration.smalltierexpansionrange.name": "Small Tier Expansion Range",
   "actuallyharvest.configuration.title": "Actually Harvest",
