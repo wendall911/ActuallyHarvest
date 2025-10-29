@@ -219,11 +219,21 @@ public class HarvestEventHandler {
                 level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(doubleBlockHalf));
                 level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(entity, doubleBlockHalf));
                 level.destroyBlock(blockPos, true, entity);
-                level.setBlock(blockPos, doubleBlockHalf.getBlock().defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 0);
+                if (ConfigHandler.Common.replantCrops()) {
+                    level.setBlock(blockPos, doubleBlockHalf.getBlock().defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 0);
+                }
+                else {
+                    level.destroyBlock(blockPos, false, entity);
+                }
             }
             else {
                 level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(cropBlockState));
-                level.setBlockAndUpdate(pos, cropBlockState);
+                if (ConfigHandler.Common.replantCrops()) {
+                    level.setBlockAndUpdate(pos, cropBlockState);
+                }
+                else {
+                    level.destroyBlock(pos, false, entity);
+                }
                 level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
             }
 
