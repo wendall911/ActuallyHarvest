@@ -63,6 +63,8 @@ public class ActuallyHarvestLanguageProvider extends FabricLanguageProvider {
         addTranslationDescription(builder, "xpfromharvestrangeamount");
         addTranslationName(builder, "xpfromharvestuserange", "XP From Harvest Use Range");
         addTranslationDescription(builder, "xpfromharvestuserange");
+        addTranslationName(builder, "replantcrops", "Replant Crops");
+        addTranslationDescription(builder, "replantcrops");
     }
 
     private void addTranslationTitle(TranslationBuilder builder, String title) {

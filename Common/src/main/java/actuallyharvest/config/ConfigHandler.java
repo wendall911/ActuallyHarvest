@@ -190,6 +190,7 @@ public class ConfigHandler {
         private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> blacklistMods;
         private final WhiteNoiseConfigSpec.ConfigValue<List<? extends String>> blacklistHeldItems;
         private final WhiteNoiseConfigSpec.BooleanValue allowFakePlayer;
+        private final WhiteNoiseConfigSpec.BooleanValue replantCrops;
 
         private static final Map<BlockState, BlockState> crops = Maps.newHashMap();
         private static final Set<Block> rightClickBlocks = Sets.newHashSet();
@@ -278,6 +279,9 @@ public class ConfigHandler {
             blacklistHeldItems = builder
                 .comment(getTranslation("blacklisthelditems"))
                 .defineListAllowEmpty(blacklistHeldItemsList, getBlacklistHeldItems(), resourceLocationValidator);
+            replantCrops = builder
+                .comment(getTranslation("replantcrops"))
+                .define("replantCrops", true);
         }
 
         public static boolean allowEmptyHand() {
@@ -387,6 +391,10 @@ public class ConfigHandler {
 
         public static boolean isBlacklistHeldItem(ItemStack stack) {
             return COMMON.blacklistHeldItems.get().contains(ToolHelper.getItemStackId(stack).toString());
+        }
+
+        public static boolean replantCrops() {
+            return COMMON.replantCrops.get();
         }
 
     }

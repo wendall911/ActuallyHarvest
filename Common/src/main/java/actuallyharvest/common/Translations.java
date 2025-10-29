@@ -46,6 +46,7 @@ public class Translations {
         translations.put("xpfromharvestchance", "Chance of XP dropping on harvest.");
         translations.put("xpfromharvestrangeamount", "Range of XP dropped on harvest. Format: \"min-max\", example: \"0-3\"");
         translations.put("xpfromharvestuserange", "Use range for XP drop, instead of set amount.");
+        translations.put("replantcrops", "Automatically replant crops after harvesting.");
     }
 
     public static String get(String key) {
