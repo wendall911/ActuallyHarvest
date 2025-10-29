@@ -32,6 +32,10 @@ dependencies {
     //modRuntimeOnly "curse.maven:croptopia-415438:${croptopia_fabric_version}"
     //modRuntimeOnly "curse.maven:architectury-419699:${architectury_fabric_version}"
     //modRuntimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
+    //modRuntimeOnly "curse.maven:letsdo_brewery-1038106:${letsdo_brewery_fabric_version}"
+    //modRuntimeOnly "curse.maven:letsdo_herbal-951221:${letsdo_herbal_fabric_version}"
+    //modRuntimeOnly "curse.maven:letsdo_farm-1038103:${letsdo_farm_fabric_version}"
+    //modRuntimeOnly "curse.maven:letsdo_vinery-704465:${letsdo_vinery_fabric_version}"
 }
 
 loom {
@@ -115,6 +119,10 @@ publishMods {
             optional('farmers-delight-refabricated')
             optional('croptopia')
             optional('fruit-trees')
+            optional('lets-do-brewery-farm-charm-compat')
+            optional('lets-do-herbal-brews')
+            optional('lets-do-farm-charm')
+            optional('lets-do-vinery')
         }
     }
     if (project.hasProperty("${modrinth_api_key_prop}")) {
@@ -131,6 +139,10 @@ publishMods {
             optional('ready-player-fun')
             optional('farmers-delight-refabricated')
             optional('fruitful-fun')
+            optional('lets-do-brewery-farmcharm-compat')
+            optional('lets-do-herbalbrews')
+            optional('lets-do-farm-charm')
+            optional('lets-do-vinery')
         }
     }
     if (project.hasProperty("${discord_webhook_prop}")) {
