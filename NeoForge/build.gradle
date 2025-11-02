@@ -75,6 +75,8 @@ dependencies {
     //runtimeOnly "curse.maven:letsdo_herbal-951221:${letsdo_herbal_neoforge_version}"
     //runtimeOnly "curse.maven:letsdo_farm-1038103:${letsdo_farm_neoforge_version}"
     //runtimeOnly "curse.maven:letsdo_vinery-704465:${letsdo_vinery_neoforge_version}"
+    //runtimeOnly "curse.maven:collective-342584:${collective_version}"
+    //runtimeOnly "curse.maven:quick_right_click-880596:${quick_right_click_version}"
 }
 
 sourceSets.main.resources {

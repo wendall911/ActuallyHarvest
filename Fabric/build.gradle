@@ -36,6 +36,8 @@ dependencies {
     //modRuntimeOnly "curse.maven:letsdo_herbal-951221:${letsdo_herbal_fabric_version}"
     //modRuntimeOnly "curse.maven:letsdo_farm-1038103:${letsdo_farm_fabric_version}"
     //modRuntimeOnly "curse.maven:letsdo_vinery-704465:${letsdo_vinery_fabric_version}"
+    //modRuntimeOnly "curse.maven:collective-342584:${collective_version}"
+    //modRuntimeOnly "curse.maven:quick_right_click-880596:${quick_right_click_version}"
 }
 
 loom {
