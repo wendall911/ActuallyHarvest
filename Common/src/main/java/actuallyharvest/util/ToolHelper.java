@@ -13,7 +13,13 @@ import actuallyharvest.config.ConfigHandler;
 public class ToolHelper {
 
     public static boolean isHoe(ItemStack stack) {
-        return !stack.isEmpty() && (stack.getItem() instanceof HoeItem || stack.is(ItemTags.HOES));
+        if (!stack.isEmpty()) {
+            boolean configuredHoe = ConfigHandler.Common.getHoeTools().containsKey(stack.getItem());
+
+            return stack.getItem() instanceof HoeItem || stack.is(ItemTags.HOES) || configuredHoe;
+        }
+
+        return false;
     }
 
     public static int getRange(ItemStack hoe) {
