@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -126,7 +126,7 @@ public class ConfigHandler {
         }
 
         for (String blockKey : COMMON.harvestableBlocks.get()) {
-            Optional<Holder.Reference<Block>> blockReference = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(blockKey));
+            Optional<Holder.Reference<Block>> blockReference = BuiltInRegistries.BLOCK.get(Identifier.parse(blockKey));
 
             if (blockReference.isPresent() && blockReference.get().value() != Blocks.AIR && !Common.isBlacklistMod(blockReference.get().value())) {
                 Common.rightClickBlocks.add(blockReference.get().value());
@@ -162,7 +162,7 @@ public class ConfigHandler {
         for (String hoeItem : COMMON.hoeItems.get()) {
             String[] parts = hoeItem.split("-");
             int range = ToolHelper.getBaseRange(Integer.parseInt(parts[1]));
-            ResourceLocation loc = ResourceLocation.parse(parts[0]);
+            Identifier loc = Identifier.parse(parts[0]);
             Optional<Holder.Reference<Item>> itemReference = BuiltInRegistries.ITEM.get(loc);
 
             itemReference.ifPresent(reference -> Common.hoeTools.put(reference.value(), range));

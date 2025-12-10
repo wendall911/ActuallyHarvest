@@ -1,9 +1,9 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
-    id 'io.github.goooler.shadow'
 }
 
+def identifier = "${mod_id}-${minecraft_version}-neoforge"
 def modLoader = "${project.name}".toUpperCase()
 def actualVersion = version
 version = "${version}-${modLoader}"
@@ -16,10 +16,6 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = mappings_minecraft_version
-        mappingsVersion = mappings_version
-    }
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
@@ -30,7 +26,6 @@ neoForge {
         }
         server {
             server()
-            programArgument '--nogui'
         }
     }
     mods {
@@ -82,12 +77,8 @@ sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
-shadowJar {
-    archiveClassifier = ''
-}
-
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
-def publishFile = project(":").projectDir.toString() + "/NeoForge/build/libs/${archivesBaseName}-${version}.jar"
+def publishFile = project(":").projectDir.toString() + "/NeoForge/build/libs/${identifier}-${version}.jar"
 def display_name = "${project.name} ${minecraft_version}-${version}"
 def display_version = "${minecraft_version}-${version}"
 
@@ -162,6 +153,25 @@ publishMods {
             username = "${mod_author}"
             content = changelog.map {
                 "# A new version of ${mod_display_name} for NeoForge ${minecraft_version} has been released! \n" + it
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId identifier
+            version project.version
+            // This gives us the built version NeoForge requires
+            artifact jar
+        }
+    }
+    repositories {
+        if (System.getenv('local_maven') != null) {
+            maven {
+                url 'file://' + System.getenv('local_maven')
             }
         }
     }

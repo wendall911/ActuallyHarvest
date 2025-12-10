@@ -11,7 +11,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoneycombItem;
@@ -42,7 +42,7 @@ public class BlockHelper {
         return getBlockId(block).getPath().contains("_bottom");
     }
 
-    public static ResourceLocation getBlockId(Block block) {
+    public static Identifier getBlockId(Block block) {
         return BuiltInRegistries.BLOCK.getKey(block);
     }
 

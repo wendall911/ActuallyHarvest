@@ -6,7 +6,7 @@ import java.util.Optional;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -83,7 +83,7 @@ public class ToolHelper {
         return tier;
     }
 
-    public static ResourceLocation getItemStackId(ItemStack stack) {
+    public static Identifier getItemStackId(ItemStack stack) {
         return BuiltInRegistries.ITEM.getKey(stack.getItem());
     }
 
