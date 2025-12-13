@@ -8,12 +8,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DiggerItem;
@@ -21,21 +21,21 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.level.block.DoublePlantBlock;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import technology.roughness.whitenoise.config.WhiteNoiseConfigSpec;
 
@@ -89,7 +89,7 @@ public class ConfigHandler {
                         Common.crops.put(maxAgeCropBlockstate, cropBlockstate);
                     }
                     else if (block instanceof CocoaBlock cocoaBlock) {
-                        // Iterate over directions and configre all possible block states.
+                        // Iterate over directions and configure all possible block states.
                         BlockStateProperties.HORIZONTAL_FACING.getAllValues().forEach(direction -> {
                             BlockState zeroState = cocoaBlock.defaultBlockState().setValue(CocoaBlock.AGE, 0).setValue(CocoaBlock.FACING, direction.value());
                             BlockState maxAgeState = cocoaBlock.defaultBlockState().setValue(CocoaBlock.AGE, CocoaBlock.MAX_AGE).setValue(CocoaBlock.FACING, direction.value());
@@ -99,6 +99,12 @@ public class ConfigHandler {
                     else if ((block instanceof BushBlock || block instanceof GrowingPlantBlock)
                             && block instanceof BonemealableBlock) {
                         Common.rightClickBlocks.add(block);
+                    }
+                    else if (block instanceof NetherWartBlock netherWartBlock) {
+                        BlockState netherWartBlockstate = netherWartBlock.defaultBlockState();
+                        BlockState maxAgeNwBlockstate = netherWartBlock.defaultBlockState().setValue(NetherWartBlock.AGE, NetherWartBlock.MAX_AGE);
+
+                        Common.crops.put(maxAgeNwBlockstate, netherWartBlockstate);
                     }
                 }
             }
