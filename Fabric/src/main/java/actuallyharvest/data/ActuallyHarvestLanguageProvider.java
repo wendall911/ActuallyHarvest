@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import actuallyharvest.common.Translations;
 import com.google.common.base.Joiner;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
 import net.minecraft.core.HolderLookup;
@@ -16,7 +16,7 @@ public class ActuallyHarvestLanguageProvider extends FabricLanguageProvider {
 
     private static final Joiner LINE_JOINER = Joiner.on("\n");
 
-    protected ActuallyHarvestLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryFuture) {
+    protected ActuallyHarvestLanguageProvider(FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryFuture) {
         super(dataOutput, "en_us", registryFuture);
     }
 
