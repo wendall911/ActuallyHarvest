@@ -148,7 +148,7 @@ public class BlockHelper {
     public static boolean playerCanHarvest(Player player) {
         if (ConfigHandler.Common.allowFakePlayer()) return true;
 
-        return !Services.PLATFORM.isFakePlayer(player);
+        return !Services.WN_PLATFORM.isFakePlayer(player);
     }
 
     private static BlockState getAxeStrippingState(BlockState state) {
