@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
@@ -22,17 +22,17 @@ public class BlockHolderLookup {
         return new HolderLookup.RegistryLookup.Delegate<Block>() {
 
             @Override
-            public @NotNull RegistryLookup<Block> parent() {
+            public @NonNull RegistryLookup<Block> parent() {
                 return BuiltInRegistries.BLOCK.filterElements(block -> block instanceof Block);
             }
 
             @Override
-            public @NotNull Optional<HolderSet.Named<Block>> get(@NotNull TagKey<Block> tagKey) {
+            public @NonNull Optional<HolderSet.Named<Block>> get(@NonNull TagKey<Block> tagKey) {
                 return Optional.ofNullable(immutablemap.get(tagKey));
             }
 
             @Override
-            public @NotNull Stream<HolderSet.Named<Block>> listTags() {
+            public @NonNull Stream<HolderSet.Named<Block>> listTags() {
                 return immutablemap.values().stream();
             }
         };
