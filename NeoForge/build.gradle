@@ -103,6 +103,7 @@ publishMods {
             optional('charged-charms')
             optional('creeper-fireworks')
             optional('homeostatic')
+            optional('homeostatic-seasons')
             optional('magical-psi-revival')
             optional('simpletextoverlay')
             optional('ready-player-fun')
@@ -130,6 +131,7 @@ publishMods {
             optional('charged-charms')
             optional('creeper-fireworks-mod')
             optional('homeostatic')
+            optional('homeostatic-seasons')
             optional('magical-psi-revival')
             optional('simpletextoverlay')
             optional('ready-player-fun')
@@ -159,7 +161,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
-            artifactId identifier
+            artifactId "${mod_id}-${minecraft_version}-neoforge"
             version project.version
             // This gives us the built version NeoForge requires
             artifact jar
