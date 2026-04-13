@@ -179,7 +179,12 @@ public class HarvestEventHandler {
 
             MutableBoolean hasTaken = new MutableBoolean(false);
             Item blockItem = blockState.getBlock().asItem();
-            boolean dropXp = entity instanceof Player;
+            boolean dropXp = false;
+
+            if (entity instanceof ServerPlayer player) {
+                dropXp = true;
+                player.swing(InteractionHand.MAIN_HAND, true);
+            }
 
             if (!cropBlockState.hasProperty(top)) {
                 Block.getDrops(blockState, serverLevel, pos, level.getBlockEntity(pos), entity, copy).forEach((stack) -> {
