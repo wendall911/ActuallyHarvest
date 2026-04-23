@@ -39,18 +39,15 @@ dependencies {
     implementation group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-neoforge", version: "${whitenoise_version}"
     jarJar group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-neoforge", version: "${whitenoise_version}"
 
-    /*
-     * TODO Re-enable REI when it is released
     runtimeOnly "mezz.jei:jei-${jei_minecraft_version}-neoforge:${jei_version}"
-    */
 
     // Testing mods
     //runtimeOnly "curse.maven:configured-457570:5441232"
     //runtimeOnly "curse.maven:catalogue-459701:5631367"
     //runtimeOnly "curse.maven:farmers_delight-398521:${farmers_delight_neoforge_version}"
     //runtimeOnly "curse.maven:extra_delight-842106:5659546"
-    //runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_neoforge_version}"
-    //runtimeOnly "curse.maven:croptopia-415438:${croptopia_neoforge_version}"
+    runtimeOnly "curse.maven:ephero_lib-885449:${ephero_lib_neoforge_version}"
+    runtimeOnly "curse.maven:croptopia-415438:${croptopia_neoforge_version}"
     //runtimeOnly "curse.maven:phc_crops-361385:${phc_crops_neoforge_version}"
     //runtimeOnly "curse.maven:phc_trees-365460:${phc_trees_neoforge_version}"
     //runtimeOnly "curse.maven:terrablender-940057:${terrablender_version}"
