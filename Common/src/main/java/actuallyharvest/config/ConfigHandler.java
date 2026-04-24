@@ -219,7 +219,9 @@ public class ConfigHandler {
         private static final List<String> hoeItemList = List.of("hoeItems");
         private static final String[] defaultHoeItemList = new String[] {};
         private static final List<String> blacklistCropsList = List.of("blacklistCrops");
-        private static final String[] defaultBlacklistCrops = new String[] {};
+        private static final String[] defaultBlacklistCrops = new String[] {
+            "minecraft:torchflower_crop"
+        };
         private static final List<String> blacklistModsList = List.of("blacklistMods");
         private static final String[] defaultBlacklistMods = new String[] {};
         private static final List<String> blacklistHeldItemsList = List.of("blacklistHeldItems");

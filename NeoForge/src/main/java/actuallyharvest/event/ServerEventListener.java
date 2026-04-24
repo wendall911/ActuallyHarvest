@@ -5,9 +5,6 @@ import net.minecraft.util.TriState;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
-
-import actuallyharvest.config.ConfigHandler;
 
 public class ServerEventListener {
 
@@ -21,11 +18,6 @@ public class ServerEventListener {
             event.setUseBlock(TriState.FALSE);
             event.setUseItem(TriState.FALSE);
         }
-    }
-
-    @SubscribeEvent
-    public static void initConfig(final ServerStartingEvent event) {
-        ConfigHandler.init();
     }
 
 }
