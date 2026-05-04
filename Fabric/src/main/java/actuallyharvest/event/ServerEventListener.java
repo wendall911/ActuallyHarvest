@@ -2,10 +2,28 @@ package actuallyharvest.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+
 public class ServerEventListener {
 
     public static void init() {
-        UseBlockCallback.EVENT.register(((player, world, hand, hitResult) -> HarvestEventHandler.rightClickBlock(player, hand, hitResult.getBlockPos(), hitResult).getInteractionResult()));
+        UseBlockCallback.EVENT.register(((player, world, hand, hitResult) -> {
+            InteractionResult result = HarvestEventHandler.rightClickBlock(player, hand, hitResult.getBlockPos(), hitResult);
+
+            if (InteractionResult.SUCCESS.equals(result) && player instanceof ServerPlayer sp) {
+                ItemStack heldStack = sp.getItemInHand(hand);
+                Inventory inventory = sp.getInventory();
+                int slot = inventory.findSlotMatchingItem(heldStack);
+
+                sp.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, heldStack.copy()));
+            }
+
+            return result;
+        }));
     }
 
 }
