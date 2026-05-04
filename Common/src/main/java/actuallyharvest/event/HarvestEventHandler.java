@@ -25,6 +25,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -51,33 +52,33 @@ public class HarvestEventHandler {
 
     private static boolean isHarvesting = false;
 
-    public static ClickResult rightClickBlock(Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitResult) {
-        if (player.level().isClientSide() || isHarvesting || !BlockHelper.playerCanHarvest(player)) return ClickResult.pass();
+    public static InteractionResult rightClickBlock(Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitResult) {
+        if (player.level().isClientSide() || isHarvesting || !BlockHelper.playerCanHarvest(player)) return InteractionResult.PASS;
 
         isHarvesting = true;
 
-        ClickResult result = getClickResult(player, hand, pos, hitResult);
+        InteractionResult result = getClickResult(player, hand, pos, hitResult);
 
         isHarvesting = false;
 
         return result;
     }
 
-    private static ClickResult getClickResult(Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitResult) {
-        if (player == null || hand == null || player.isSpectator()) return ClickResult.pass();
-        if (hitResult.getType() != HitResult.Type.BLOCK || !hitResult.getBlockPos().equals(pos)) return ClickResult.pass();
+    private static InteractionResult getClickResult(Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitResult) {
+        if (player == null || hand == null || player.isSpectator()) return InteractionResult.PASS;
+        if (hitResult.getType() != HitResult.Type.BLOCK || !hitResult.getBlockPos().equals(pos)) return InteractionResult.PASS;
 
         Level level = player.level();
         BlockState blockState = level.getBlockState(pos);
         BlockState modifiedState = BlockHelper.getToolModifiedState(blockState, new UseOnContext(player, hand, hitResult), "hoe_till", true);
 
-        if (modifiedState != null) return ClickResult.pass();
+        if (modifiedState != null) return InteractionResult.PASS;
 
         ItemStack heldStack = player.getItemInHand(hand);
         boolean isHoe = ToolHelper.isHoe(heldStack);
 
         if (!ConfigHandler.Common.allowEmptyHand() && !isHoe) {
-            return ClickResult.pass();
+            return InteractionResult.PASS;
         }
 
         BlockState above = level.getBlockState(pos.above());
@@ -86,7 +87,7 @@ public class HarvestEventHandler {
         if (isHoe) {
             if (BlockHelper.getInteractionTypeForBlock(blockState, true) == BlockHelper.InteractionType.NONE
                     && BlockHelper.getInteractionTypeForBlock(above, true) == BlockHelper.InteractionType.NONE) {
-                return ClickResult.pass();
+                return InteractionResult.PASS;
             }
             range = ToolHelper.getRange(heldStack);
         }
@@ -111,13 +112,13 @@ public class HarvestEventHandler {
         }
 
         if (!harvested) {
-            return ClickResult.pass();
+            return InteractionResult.PASS;
         }
         else if (BlockHelper.isBlockItem(heldStack)) {
-            return ClickResult.pass();
+            return InteractionResult.SUCCESS;
         }
 
-        return ClickResult.interrupt();
+        return InteractionResult.PASS;
     }
 
     private static boolean tryHarvest(Level level, BlockPos pos, @Nullable LivingEntity entity, @Nullable InteractionHand hand, boolean canReach) {

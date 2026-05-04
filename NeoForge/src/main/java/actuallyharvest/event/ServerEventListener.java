@@ -1,6 +1,9 @@
 package actuallyharvest.event;
 
-import net.minecraft.util.TriState;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -10,13 +13,20 @@ public class ServerEventListener {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        ClickResult result = HarvestEventHandler.rightClickBlock(event.getEntity(), event.getHand(), event.getPos(), event.getHitVec());
+        InteractionResult result = HarvestEventHandler.rightClickBlock(event.getEntity(), event.getHand(), event.getPos(), event.getHitVec());
 
-        if (result.isPresent()) {
+        if (InteractionResult.SUCCESS.equals(result)) {
+            if (event.getEntity() instanceof ServerPlayer sp) {
+                ItemStack heldStack = sp.getItemInHand(event.getHand());
+                Inventory inventory = sp.getInventory();
+                int slot = inventory.findSlotMatchingItem(heldStack);
+
+                sp.connection.send(sp.getInventory().createInventoryUpdatePacket(slot));
+
+            }
+
             event.setCanceled(true);
-            event.setCancellationResult(result.getInteractionResult());
-            event.setUseBlock(TriState.FALSE);
-            event.setUseItem(TriState.FALSE);
+            event.setCancellationResult(result);
         }
     }
 
