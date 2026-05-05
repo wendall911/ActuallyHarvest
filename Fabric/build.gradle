@@ -3,8 +3,7 @@ plugins {
     id 'fabric-loom'
 }
 
-def modLoader = "${project.name}".toUpperCase()
-version = "${version}-${modLoader}"
+def identifier = "${mod_id}-${minecraft_version}-fabric"
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -19,8 +18,8 @@ dependencies {
     modImplementation group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-fabric", version: "${whitenoise_version}"
     include group: 'technology.roughness.whitenoise', name: "whitenoise-${minecraft_version}-fabric", version: "${whitenoise_version}"
 
-    modRuntimeOnly "dev.architectury:architectury-fabric:${architectury_version}"
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+    modLocalRuntime "dev.architectury:architectury-fabric:${architectury_version}"
+    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
@@ -28,16 +27,16 @@ dependencies {
     modLocalRuntime group: 'com.terraformersmc', name: 'modmenu', version: "${mod_menu_version}"
 
     // Testing Mods
-    //modRuntimeOnly "curse.maven:epherolib-885449:${ephero_lib_fabric_version}"
-    //modRuntimeOnly "curse.maven:croptopia-415438:${croptopia_fabric_version}"
-    //modRuntimeOnly "curse.maven:architectury-419699:${architectury_fabric_version}"
-    //modRuntimeOnly "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
-    //modRuntimeOnly "curse.maven:letsdo_brewery-1038106:${letsdo_brewery_fabric_version}"
-    //modRuntimeOnly "curse.maven:letsdo_herbal-951221:${letsdo_herbal_fabric_version}"
-    //modRuntimeOnly "curse.maven:letsdo_farm-1038103:${letsdo_farm_fabric_version}"
-    //modRuntimeOnly "curse.maven:letsdo_vinery-704465:${letsdo_vinery_fabric_version}"
-    //modRuntimeOnly "curse.maven:collective-342584:${collective_version}"
-    //modRuntimeOnly "curse.maven:quick_right_click-880596:${quick_right_click_version}"
+    //modLocalRuntime "curse.maven:epherolib-885449:${ephero_lib_fabric_version}"
+    //modLocalRuntime "curse.maven:croptopia-415438:${croptopia_fabric_version}"
+    //modLocalRuntime "curse.maven:architectury-419699:${architectury_fabric_version}"
+    //modLocalRuntime "curse.maven:ldflower-850779:${ld_flower_breeding_version}"
+    //modLocalRuntime "curse.maven:letsdo_brewery-1038106:${letsdo_brewery_fabric_version}"
+    //modLocalRuntime "curse.maven:letsdo_herbal-951221:${letsdo_herbal_fabric_version}"
+    //modLocalRuntime "curse.maven:letsdo_farm-1038103:${letsdo_farm_fabric_version}"
+    //modLocalRuntime "curse.maven:letsdo_vinery-704465:${letsdo_vinery_fabric_version}"
+    //modLocalRuntime "curse.maven:collective-342584:${collective_version}"
+    //modLocalRuntime "curse.maven:quick_right_click-880596:${quick_right_click_version}"
 }
 
 loom {
@@ -87,7 +86,7 @@ processResources {
 }
 
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
-def publishFile = project(":").projectDir.toString() + "/Fabric/build/libs/${archivesBaseName}-${version}.jar"
+def publishFile = project(":").projectDir.toString() + "/Fabric/build/libs/${identifier}-${version}.jar"
 def display_name = "${project.name} ${minecraft_version}-${version}"
 def display_version = "${minecraft_version}-${version}"
 
@@ -116,6 +115,8 @@ publishMods {
             optional('charged-charms')
             optional('creeper-fireworks')
             optional('homeostatic')
+            optional('homeostatic-seasons')
+            optional('mobchampions')
             optional('simpletextoverlay')
             optional('ready-player-fun')
             optional('farmers-delight-refabricated')
@@ -137,6 +138,8 @@ publishMods {
             optional('charged-charms')
             optional('creeper-fireworks-mod')
             optional('homeostatic')
+            optional('homeostatic-seasons')
+            optional('mobchampions')
             optional('simpletextoverlay')
             optional('ready-player-fun')
             optional('farmers-delight-refabricated')
@@ -155,6 +158,17 @@ publishMods {
             content = changelog.map {
                 "# A new version of ${mod_display_name} for Fabric ${minecraft_version} has been released! \n" + it
             }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId identifier
+            version project.version
+            from components.java
         }
     }
 }
