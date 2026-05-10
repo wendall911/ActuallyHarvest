@@ -19,7 +19,9 @@ public class ServerEventListener {
                 Inventory inventory = sp.getInventory();
                 int slot = inventory.findSlotMatchingItem(heldStack);
 
-                sp.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, heldStack.copy()));
+                if (!heldStack.isEmpty()) {
+                    sp.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, heldStack.copy()));
+                }
             }
 
             return result;
