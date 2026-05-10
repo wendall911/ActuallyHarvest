@@ -21,8 +21,9 @@ public class ServerEventListener {
                 Inventory inventory = sp.getInventory();
                 int slot = inventory.findSlotMatchingItem(heldStack);
 
-                sp.connection.send(sp.getInventory().createInventoryUpdatePacket(slot));
-
+                if (!heldStack.isEmpty()) {
+                    sp.connection.send(sp.getInventory().createInventoryUpdatePacket(slot));
+                }
             }
 
             event.setCanceled(true);
