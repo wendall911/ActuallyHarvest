@@ -1,15 +1,9 @@
-# ActuallyHarvest — Project Context
+# ActuallyHarvest - Project Context
 
 ## What This Is
-A standalone mod forked from the right-click harvest feature in the
-[Quark](https://modrinth.com/mod/quark) mod. Quark bundles many features
-together; this mod extracts that one feature for players who want it without
-the rest of Quark.
+A standalone mod forked from the right-click harvest feature in the [Quark](https://modrinth.com/mod/quark) mod. Quark bundles many features together; this mod extracts that one feature for players who want it without the rest of Quark.
 
-Supports most modded crops and trees (Pam's HarvestCraft 2, Croptopia, Farmer's
-Delight, The Veggie Way, Fruitful Fun) with configurable behavior including hoe
-range expansion, XP drops, auto-replant, and mod/crop blacklists.
-See README.md for full config options.
+Supports most modded crops and trees (Pam's HarvestCraft 2, Croptopia, Farmer's Delight, The Veggie Way, Fruitful Fun) with configurable behavior including hoe range expansion, XP drops, auto-replant, and mod/crop blacklists.  See README.md for full config options.
 
 ## Project Structure
 Multi-loader: `Common/` + `NeoForge/` + `Fabric/`
