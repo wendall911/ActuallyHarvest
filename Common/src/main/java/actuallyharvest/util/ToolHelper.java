@@ -10,7 +10,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -25,7 +24,7 @@ public class ToolHelper {
         if (!stack.isEmpty()) {
             boolean configuredHoe = ConfigHandler.Common.getHoeTools().containsKey(stack.getItem());
 
-            return stack.getItem() instanceof HoeItem || stack.is(ItemTags.HOES) || configuredHoe;
+            return stack.is(ItemTags.HOES) || configuredHoe;
         }
 
         return false;

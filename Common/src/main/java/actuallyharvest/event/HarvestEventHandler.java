@@ -11,6 +11,7 @@ package actuallyharvest.event;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.minecraft.world.item.component.SwingAnimation;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -70,7 +71,7 @@ public class HarvestEventHandler {
 
         Level level = player.level();
         BlockState blockState = level.getBlockState(pos);
-        BlockState modifiedState = BlockHelper.getToolModifiedState(blockState, new UseOnContext(player, hand, hitResult), "hoe_till", true);
+        BlockState modifiedState = BlockHelper.getToolModifiedState(blockState, new UseOnContext(player, hand, hitResult));
 
         if (modifiedState != null) return InteractionResult.PASS;
 
@@ -184,7 +185,7 @@ public class HarvestEventHandler {
 
             if (entity instanceof ServerPlayer player) {
                 dropXp = true;
-                player.swing(InteractionHand.MAIN_HAND, true);
+                player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
             }
 
             if (!cropBlockState.hasProperty(top)) {

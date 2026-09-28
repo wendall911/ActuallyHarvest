@@ -17,8 +17,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
@@ -139,8 +139,10 @@ public class ConfigHandler {
         }
 
         BuiltInRegistries.ITEM.forEach(item -> {
-            if (item instanceof HoeItem hoe) {
-                Tool tool = hoe.components().get(DataComponents.TOOL);
+            Holder<Item> holder = BuiltInRegistries.ITEM.wrapAsHolder(item);
+
+            if (holder.is(ItemTags.HOES)) {
+                Tool tool = holder.components().get(DataComponents.TOOL);
                 TagKey<Block> tagKey = null;
                 HolderSet<Block> blocks = null;
 
@@ -158,7 +160,7 @@ public class ConfigHandler {
                 }
 
                 if (tagKey == BlockTags.MINEABLE_WITH_HOE) {
-                    Common.hoeTools.put(hoe, ToolHelper.getBaseRange(ToolHelper.getToolTier(blocks)));
+                    Common.hoeTools.put(item, ToolHelper.getBaseRange(ToolHelper.getToolTier(blocks)));
                 }
             }
         });
