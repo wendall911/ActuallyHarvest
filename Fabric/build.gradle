@@ -19,7 +19,7 @@ dependencies {
     localRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    //localRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    localRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
 
     localRuntime group: 'com.terraformersmc', name: 'modmenu', version: "${mod_menu_version}"
 
@@ -32,6 +32,8 @@ dependencies {
     //localRuntime "curse.maven:letsdo_herbal-951221:${letsdo_herbal_fabric_version}"
     //localRuntime "curse.maven:letsdo_farm-1038103:${letsdo_farm_fabric_version}"
     //localRuntime "curse.maven:letsdo_vinery-704465:${letsdo_vinery_fabric_version}"
+    //localRuntime "curse.maven:farmers_delight-993166:${farmers_delight_fabric_version}"
+    //localRuntime "curse.maven:cropville-1299694:${cropville_fabric_version}"
 }
 
 loom {
